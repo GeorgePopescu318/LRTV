@@ -1,0 +1,15 @@
+﻿@model NewsModel
+
+@{
+	NewsModel news = Model;
+	ViewData["Title"] = news.Title;
+}
+
+<h1>Title: @news.Title</h1>
+
+<article>
+	<h2>Lead: @news.Lead</h2>
+	<p>Article by @news.Author at the date @news.Data in cathegory @news.Cathegory!.Name</p>
+</article>
+
+<a asp-action="Index">Back to Today's news</a>

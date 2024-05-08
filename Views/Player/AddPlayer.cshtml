@@ -1,0 +1,59 @@
+﻿@model PlayerModel
+
+@{
+    ViewData["Title"] = "Add new player";
+}
+
+<div class="container">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="@Model.Nickname" class="control-label">InGame Name</label>
+            <input asp-for="@Model.Nickname" class="form-control" />
+            <span asp-validation-for="@Model.Nickname" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Name" class="control-label">Name</label>
+            <input asp-for="@Model.Name" class="form-control" />
+            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Age" class="control-label">Age</label>
+            <input asp-for="@Model.Age" class="form-control" />
+            <span asp-validation-for="@Model.Age" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.CurrentTeam" class="control-label">Current Team</label>
+            <input asp-for="@Model.CurrentTeam" class="form-control" />
+            <span asp-validation-for="@Model.CurrentTeam" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Achievements" class="control-label">Achievements</label>
+            <input asp-for="@Model.Achievements" class="form-control" />
+            <span asp-validation-for="@Model.Achievements" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Rating" class="control-label">Rating</label>
+            <input asp-for="@Model.Rating" class="form-control" />
+            <span asp-validation-for="@Model.Rating" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Headshots" class="control-label">Headshots Percentage</label>
+            <input asp-for="@Model.Headshots" class="form-control" />
+            <span asp-validation-for="@Model.Headshots" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.KD" class="control-label">K/D</label>
+            <input asp-for="@Model.KD" class="form-control" />
+            <span asp-validation-for="@Model.KD" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.MapsPlayed" class="control-label">Maps Played</label>
+            <input asp-for="@Model.MapsPlayed" class="form-control"></input>
+            <span asp-validation-for="@Model.MapsPlayed" class="text-danger"></span>
+        </div>
+        <br />
+        <input type="submit" value="Add" />
+        <br />
+    </form>
+</div>

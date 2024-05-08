@@ -1,0 +1,21 @@
+﻿@model List<PlayerModel>
+
+@{
+    List<PlayerModel> players = Model;
+    ViewData["Title"] = "player";
+
+}
+
+<h1>Pagina Jucator</h1>
+
+@{
+    foreach(PlayerModel player in players)
+    {
+        <h2><a asp-controller="Player" asp-action="Player" asp-route-playerId="@player.Id">@player.Nickname</a> </h2>
+        <h2><a asp-controller="Player" asp-action="ModifyPlayer" asp-route-playerId="@player.Id">Modify a player</a> </h2>
+        <h2><a asp-controller="Player" asp-action="DeletePlayer" asp-route-playerId="@player.Id">Delete a player</a> </h2>
+        <br/>
+    }
+}
+
+<h2><a asp-action ="AddPlayer">Add a new player</a></h2>
