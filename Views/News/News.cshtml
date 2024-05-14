@@ -1,5 +1,6 @@
 ﻿@model NewsModel
-
+@using Markdig
+@using System.Web
 @{
 	NewsModel news = Model;
 	ViewData["Title"] = news.Title;
@@ -10,6 +11,17 @@
 <article>
 	<h2>Lead: @news.Lead</h2>
 	<p>Article by @news.Author at the date @news.Data in cathegory @news.Cathegory!.Name</p>
+    @try
+    {
+        if (!string.IsNullOrEmpty(Model.Body))
+        {
+            <div id="main">@Html.Raw(Markdown.ToHtml(Model.Body))</div>
+        }
+    }
+    catch (Exception ex)
+    {
+        <div>No body</div>
+    }
 </article>
 
 <a asp-action="Index">Back to Today's news</a>

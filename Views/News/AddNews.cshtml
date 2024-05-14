@@ -25,13 +25,12 @@
     </div>
     <div class="form-group">
         <label asp-for="@Model.Body" class="control-label">Content</label>
-        <input asp-for="@Model.Body" class="form-control" />
-        <span asp-validation-for="@Model.Body" class="text-danger"></span>
-    </div>
+            <textarea asp-for="@Model.Body" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+            <span asp-validation-for="@Model.Body" class="text-danger"></span>
     <div class="form-group">
         <label asp-for="@Model.Data" class="control-label">Date</label>
         <input asp-for="@Model.Data" class="form-control" />
-        <span asp-validation-for="@Model.Data" class="text-danger"></span>
+        @* <span asp-validation-for="@Model.Data" class="text-danger"></span> *@
     </div>
     <div class="form-group">
         <label asp-for="@Model.CathegoryID" class="control-label">Category Id</label>
@@ -43,3 +42,4 @@
     <br />
 </form>
 </div>
+
