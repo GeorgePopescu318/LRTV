@@ -1,11 +1,15 @@
-﻿@model PlayerModel
+﻿@using LRTV.ViewModels
+@using System.ComponentModel.DataAnnotations;
+
+@* @model PlayerModel *@
+@model CreatePlayerViewModel
 
 @{
     ViewData["Title"] = "Add new player";
 }
 
 <div class="container">
-    <form method="post">
+    <form method="post" asp-action="AddPlayer" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="@Model.Nickname" class="control-label">InGame Name</label>
@@ -51,6 +55,11 @@
             <label asp-for="@Model.MapsPlayed" class="control-label">Maps Played</label>
             <input asp-for="@Model.MapsPlayed" class="form-control"></input>
             <span asp-validation-for="@Model.MapsPlayed" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Image">Image</label>
+            <input asp-for="@Model.Image" type="file" class="form-control" placeholder="Image"></input>
+            <span asp-validation-for="@Model.Image" class="text-danger"></span>
         </div>
         <br />
         <input type="submit" value="Add" />
