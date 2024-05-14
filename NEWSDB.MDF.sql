@@ -13,10 +13,10 @@ SET NUMERIC_ROUNDABORT OFF;
 
 
 GO
-:setvar DatabaseName "D:\LRTVPOW\LRTV\NEWSDB.MDF"
-:setvar DefaultFilePrefix "D_\LRTVPOW\LRTV\NEWSDB.MDF_"
-:setvar DefaultDataPath "C:\Users\George\AppData\Local\Microsoft\Microsoft SQL Server Local DB\Instances\MSSQLLocalDB\"
-:setvar DefaultLogPath "C:\Users\George\AppData\Local\Microsoft\Microsoft SQL Server Local DB\Instances\MSSQLLocalDB\"
+:setvar DatabaseName "C:\.Faculta\ProiectPAWNou\LRTV\NEWSDB.MDF"
+:setvar DefaultFilePrefix "C:\.Faculta\ProiectPAWNou\LRTVNEWSDB.MDF_"
+:setvar DefaultDataPath "C:\Users\pisc0\AppData\Local\Microsoft\Microsoft SQL Server Local DB\Instances\MSSQLLocalDB\"
+:setvar DefaultLogPath "C:\Users\pisc0\AppData\Local\Microsoft\Microsoft SQL Server Local DB\Instances\MSSQLLocalDB\"
 
 GO
 :on error exit

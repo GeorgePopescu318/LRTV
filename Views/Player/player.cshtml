@@ -8,6 +8,17 @@
 <h1>Player : @player.Nickname</h1>
 
 <articke>
+    <h2>
+        @* <img src="/images/@(Model.Nickname.ToLower()).jpg" alt="Image"> *@
+        @if (@Model.Image != "noNamer.jpg")
+        {
+            <img class="card-img-top" src="@Model.Image" alt="Card image cap" width="auto" height="auto">
+        }
+        else
+        {
+            <img class="card-img-top" src="/images/noNamer.jpg" alt="Card image cap">
+        }
+    </h2>
     <h2>Name : @player.Name</h2>
     <p>Cel mai tare baiat in varsta de @player.Age care joaca la echipa @player.CurrentTeam cu whooping rating de @player.Rating</p>
 </articke>

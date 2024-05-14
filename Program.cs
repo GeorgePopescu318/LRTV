@@ -1,4 +1,7 @@
 using LRTV.ContextModels;
+using LRTV.Helpers;
+using LRTV.Interfaces;
+using LRTV.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace LRTV
@@ -13,8 +16,11 @@ namespace LRTV
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<NewsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("NewsDB")));
             builder.Services.AddDbContext<PlayersContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PlayersDB")));
-            var app = builder.Build();
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+            builder.Services.AddScoped<IPhotoService, PhotoService>();
 
+            var app = builder.Build();
+                
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
