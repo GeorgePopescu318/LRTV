@@ -1,11 +1,11 @@
-﻿@model PlayerModel
+﻿@model TeamModel
 
 @{
-    PlayerModel player = Model;
-    ViewData["Title"] = player.Nickname;
+    TeamModel team = Model;
+    ViewData["Title"] = team.Name;
 }
 
-<h1>Player : @player.Nickname</h1>
+<h1>Team : @team.Name</h1>
 
 <article>
     <h2>
@@ -19,8 +19,8 @@
             <img class="card-img-top" src="/images/noNamer.jpg" alt="Card image cap">
         }
     </h2>
-    <h2>Name : @player.Name</h2>
-    <p>Cel mai tare baiat in varsta de @player.Age care joaca la echipa @player.CurrentTeam.Name cu whooping rating de @player.Rating</p>
+    <h2>Name : @team.Name</h2>
+    <p>Cel mai tare baiat in varsta de @team.Ranking care joaca la echipa @team.Region</p>
 </article>
 
 <a asp-action="Index">Back to home page</a>

@@ -4,16 +4,19 @@ using LRTV.ContextModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace LRTV.Migrations
+namespace LRTV.Migrations.Players
 {
     [DbContext(typeof(PlayersContext))]
-    partial class PlayersContextModelSnapshot : ModelSnapshot
+    [Migration("20240515174353_AGP-NoDBSet")]
+    partial class AGPNoDBSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,7 +100,7 @@ namespace LRTV.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teams");
+                    b.ToTable("TeamModel");
                 });
 
             modelBuilder.Entity("LRTV.Models.PlayerModel", b =>

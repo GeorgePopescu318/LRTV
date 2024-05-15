@@ -1,0 +1,38 @@
+﻿@using LRTV.ViewModels
+@using System.ComponentModel.DataAnnotations;
+
+
+@model CreateTeamViewModel
+
+@{
+    ViewData["Title"] = "Add new team";
+}
+
+<div class="container">
+    <form method="post" asp-action="AddTeam" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="@Model.Name" class="control-label">Team Name</label>
+            <input asp-for="@Model.Name" class="form-control" />
+            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Region" class="control-label">Region</label>
+            <input asp-for="@Model.Region" class="form-control" />
+            <span asp-validation-for="@Model.Region" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Ranking" class="control-label">World Ranking</label>
+            <input asp-for="@Model.Ranking" class="form-control" />
+            <span asp-validation-for="@Model.Ranking" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Image">Team Logo</label>
+            <input asp-for="@Model.Image" type="file" class="form-control" placeholder="Image"></input>
+            <span asp-validation-for="@Model.Image" class="text-danger"></span>
+        </div>
+        <br />
+        <input type="submit" value="Add" />
+        <br />
+    </form>
+</div>

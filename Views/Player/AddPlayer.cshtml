@@ -6,6 +6,7 @@
 
 @{
     ViewData["Title"] = "Add new player";
+    List<SelectListItem> teams = ViewBag.Teams;
 }
 
 <div class="container">
@@ -27,9 +28,9 @@
             <span asp-validation-for="@Model.Age" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="@Model.CurrentTeam" class="control-label">Current Team</label>
-            <input asp-for="@Model.CurrentTeam" class="form-control" />
-            <span asp-validation-for="@Model.CurrentTeam" class="text-danger"></span>
+            <label asp-for="@Model.TeamID" class="control-label">Current Team</label>
+            <select asp-for="@Model.TeamID" asp-items="@teams" class="form-control"></select>
+            <span asp-validation-for="@Model.TeamID" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="@Model.Achievements" class="control-label">Achievements</label>

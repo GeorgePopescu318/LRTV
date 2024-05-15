@@ -1,0 +1,21 @@
+﻿@model List<TeamModel>
+
+@{
+    List<TeamModel> teams = Model;
+    ViewData["Title"] = "team";
+
+}
+
+<h1>Pagina Echipa</h1>
+
+@{
+    foreach (TeamModel team in teams)
+    {
+        <h2><a asp-controller="Teams" asp-action="Team" asp-route-teamId="@team.Id">@team.Name</a> </h2>
+        <h2><a asp-controller="Teams" asp-action="ModifyTeam" asp-route-teamId="@team.Id">Modify a team</a> </h2>
+        <h2><a asp-controller="Teams" asp-action="DeleteTeam" asp-route-teamId="@team.Id">Delete a team</a> </h2>
+        <br />
+    }
+}
+
+<h2><a asp-action="AddTeam">Add a new team</a></h2>

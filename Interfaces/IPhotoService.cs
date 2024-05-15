@@ -7,6 +7,8 @@ namespace LRTV.Interfaces
         Task<ImageUploadResult> AddPhotoAsyncPlayers(IFormFile file);
 
         Task<ImageUploadResult> AddPhotoAsyncNews(IFormFile file);
+
+        Task<ImageUploadResult> AddPhotoAsyncTeams(IFormFile file);
         Task<DeletionResult> DeletPhotoAsync(string publicId);
     }
 }

@@ -5,7 +5,8 @@ public class PlayerModel {
     public string Nickname { get; set; }
     public string Name { get; set; }
     public int Age { get; set; }
-    public string? CurrentTeam { get; set; }
+    public int TeamID { get; set; }
+    public TeamModel? CurrentTeam { get; set; }
     public string Achievements { get; set; }
 
     public float Rating { get; set; }

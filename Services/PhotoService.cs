@@ -59,6 +59,26 @@ namespace LRTV.Services
             return uploadResult;
         }
 
+        public async Task<ImageUploadResult> AddPhotoAsyncTeams(IFormFile file)
+        {
+            //using var newStream = new MemoryStream(File.ReadAllBytes().ToArray());
+            //var formFile = new FormFile(newStream, 0, newStream.Length, "streamFile", "");
+            var uploadResult = new ImageUploadResult();
+
+            if (file.Length > 0)
+            {
+                using var stream = file.OpenReadStream();
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    Transformation = new Transformation().Height(200).Width(200).Crop("crop").Gravity("face")
+                };
+                uploadResult = await _cloudinary.UploadAsync(uploadParams);
+
+            }
+            return uploadResult;
+        }
+
         public async Task<DeletionResult> DeletPhotoAsync(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);
