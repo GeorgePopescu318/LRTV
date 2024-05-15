@@ -12,4 +12,7 @@ public class PlayersContext : DbContext {
     public DbSet<PlayerModel> Players { get; set; }
 
     public DbSet<TeamModel> Teams { get; set; }
+    public DbSet<MatchesModel> Matches { get; set; }
+
+    public DbSet<MapsModel> Maps { get; set; }
 }

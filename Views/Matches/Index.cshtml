@@ -1,0 +1,23 @@
+﻿@model List<MatchesModel>
+
+@{
+	List<MatchesModel> matches = Model;
+	ViewData["Title"] = "matches";
+
+
+
+}
+
+<h1>Latest Matches</h1>
+
+@{
+	foreach (MatchesModel  match in matches)
+	{
+		<h2><a asp-controller="Matches" asp-action="Match" asp-route-MatchId="@match.Id">@match.Team1.Name vs @match.Team2.Name</a></h2>
+		<h2><a asp-controller="Matches" asp-action="ModifyMatch" asp-route-MatchId="@match.Id">Modify Match</a></h2>
+		<h2><a asp-controller="Matches" asp-action="DeleteMatch" asp-route-MatchId="@match.Id">Delete Match</a></h2>
+		<br />
+	}
+}
+
+<h2> <a asp-action="AddMatch"> Add Match</a></h2>

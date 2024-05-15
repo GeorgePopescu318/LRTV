@@ -22,6 +22,60 @@ namespace LRTV.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("LRTV.Models.MapsModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Maps");
+                });
+
+            modelBuilder.Entity("LRTV.Models.MatchesModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MapId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScoreTeam1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScoreTeam2")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Team1Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Team2Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MapId");
+
+                    b.HasIndex("Team1Id");
+
+                    b.HasIndex("Team2Id");
+
+                    b.ToTable("Matches");
+                });
+
             modelBuilder.Entity("LRTV.Models.PlayerModel", b =>
                 {
                     b.Property<int>("Id")
@@ -98,6 +152,27 @@ namespace LRTV.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("LRTV.Models.MatchesModel", b =>
+                {
+                    b.HasOne("LRTV.Models.MapsModel", "Map")
+                        .WithMany()
+                        .HasForeignKey("MapId");
+
+                    b.HasOne("LRTV.Models.TeamModel", "Team1")
+                        .WithMany()
+                        .HasForeignKey("Team1Id");
+
+                    b.HasOne("LRTV.Models.TeamModel", "Team2")
+                        .WithMany()
+                        .HasForeignKey("Team2Id");
+
+                    b.Navigation("Map");
+
+                    b.Navigation("Team1");
+
+                    b.Navigation("Team2");
                 });
 
             modelBuilder.Entity("LRTV.Models.PlayerModel", b =>

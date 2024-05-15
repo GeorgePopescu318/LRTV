@@ -1,0 +1,12 @@
+﻿@model MatchesModel
+
+@{
+    MatchesModel match = Model;
+    ViewData["Title"] = match.Team1.Name + " vs. " + match.Team2.Name;
+}
+
+<h1>@match.Team1.Name vs. @match.Team2.Name</h1>
+<h3>@match.DateTime</h3>
+<h2>@match.ScoreTeam1 @match.ScoreTeam2</h2>    
+
+<a asp-action="Index">Back to home page</a>
