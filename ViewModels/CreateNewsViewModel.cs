@@ -1,6 +1,8 @@
-﻿namespace LRTV.Models;
+﻿using LRTV.Models;
 
-public class NewsModel
+namespace LRTV.ViewModels;
+
+public class CreateNewsViewModel
 {
     public int Id { get; set; }
     public string Title { get; set; }
@@ -14,5 +16,5 @@ public class NewsModel
 
     public CathegoryModel? Cathegory { get; set; }
 
-    public string? Image {  get; set; }
+    public IFormFile Image { get; set; }
 }

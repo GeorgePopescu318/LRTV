@@ -11,6 +11,14 @@
 <article>
 	<h2>Lead: @news.Lead</h2>
 	<p>Article by @news.Author at the date @news.Data in cathegory @news.Cathegory!.Name</p>
+    @if (@Model.Image != "noNamer.jpg")
+    {
+        <img class="card-img-top" src="@Model.Image" alt="Card image cap" width="auto" height="auto">
+    }
+    else
+    {
+        <img class="card-img-top" src="/images/noNamer.jpg" alt="Card image cap">
+    }
     @try
     {
         if (!string.IsNullOrEmpty(Model.Body))

@@ -71,7 +71,7 @@ public class PlayerController : Controller {
         //ModelState.Remove("Image");
         if (ModelState.IsValid)
         {
-            var result = await _photoService.AddPhotoAsync(newPlayer.Image);
+            var result = await _photoService.AddPhotoAsyncPlayers(newPlayer.Image);
             var playerVM = new PlayerModel
             {
                 Nickname = newPlayer.Nickname,

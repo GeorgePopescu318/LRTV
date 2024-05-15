@@ -1,4 +1,5 @@
-﻿@model NewsModel
+﻿@using LRTV.ViewModels
+@model CreateNewsViewModel
 
 @{
     ViewData["Title"] = "Add new Article";
@@ -6,7 +7,7 @@
 }
 
 <div class="container">
-<form method="post">
+<form method="post" asp-action="AddNews" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="@Model.Title" class="control-label">Title</label>
@@ -30,12 +31,17 @@
     <div class="form-group">
         <label asp-for="@Model.Data" class="control-label">Date</label>
         <input asp-for="@Model.Data" class="form-control" />
-        @* <span asp-validation-for="@Model.Data" class="text-danger"></span> *@
+        <span asp-validation-for="@Model.Data" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="@Model.CathegoryID" class="control-label">Category Id</label>
             <select asp-for="@Model.CathegoryID" asp-items="@cathegories" class="form-control"></select>
         <span asp-validation-for="@Model.CathegoryID" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+            <label asp-for="@Model.Image">Image</label>
+            <input asp-for="@Model.Image" type="file" class="form-control" placeholder="Image"></input>
+            <span asp-validation-for="@Model.Image" class="text-danger"></span>
     </div>
     <br />
     <input type="submit" value="Add" />
