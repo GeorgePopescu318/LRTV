@@ -1,0 +1,68 @@
+﻿@model SearchModel
+
+@{
+	ViewData["Title"] = "Search Results";
+	SearchModel search = Model;
+}
+
+<h1> Search Results</h1>
+
+<form asp-action="Index" method="get">
+	<div class="form-group">
+		<label for="SearchString">Search</label>
+		</br>
+		<input type="text" name="SearchString"
+			value="" />
+		<input type="submit" value="Search" class="btn btn-primary" />
+	</div>
+</form>
+@{
+	if (search.Players != null){
+		<h2> Players </h2>
+		<ul class="list-group list-group-flush">
+		@foreach (PlayerModel player in search.Players)
+		{
+			string playerLink = Url.Action("Player", "Player", new { playerId = player.Id });
+				<li class="list-group-item list-group-item-action">
+			<a href=@playerLink style="text-decoration: none; color: inherit;display: flex;">
+				<h3>@player.Nickname</h3>
+			</a>
+			</li>
+				<hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
+		}
+		</ul>
+	}
+	if (search.Teams != null)
+	{
+		<h2> Teams </h2>
+		<ul class="list-group">
+		@foreach (TeamModel team in search.Teams)
+		{
+			string teamLink = Url.Action("Team", "Teams", new { teamId = team.Id });
+				<li class="list-group-item list-group-item-action">
+			<a href=@teamLink style="text-decoration: none; color: inherit;display: flex;">
+			<img class="img-thumbnails" src="@team.Image" alt="Card image cap" width="20px" height="20px">
+				<h3>@team.Name</h3>
+			</a>
+			</li>
+				<hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
+		}
+		</ul>
+	}
+	if (search.News != null)
+	{
+		<h2> News </h2>
+		<ul class="list-group">
+		@foreach (NewsModel article in search.News)
+		{
+			string articleLink = Url.Action("News", "News", new { newsId = article.Id });
+			<li class="list-group-item list-group-item-action">
+			<a href=@articleLink style="text-decoration: none; color: inherit;display: flex;">
+				<h3>@article.Title</h3>
+			</a>
+				</li>
+			<hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
+		}
+		</ul>
+	}
+}

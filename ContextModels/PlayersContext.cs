@@ -15,4 +15,6 @@ public class PlayersContext : DbContext {
     public DbSet<MatchesModel> Matches { get; set; }
 
     public DbSet<MapsModel> Maps { get; set; }
+	public DbSet<NewsModel> News { get; set; }
+	public DbSet<CathegoryModel> Cathegories { get; set; }
 }

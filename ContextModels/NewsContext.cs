@@ -9,6 +9,5 @@ public class NewsContext : DbContext
 
     }
 
-    public DbSet<NewsModel> News { get; set; }
-    public DbSet<CathegoryModel> Cathegories { get; set;}
+    
 }

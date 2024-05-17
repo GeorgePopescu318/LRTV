@@ -5,12 +5,23 @@
 	NewsModel news = Model;
 	ViewData["Title"] = news.Title;
 }
-
-<h1>Title: @news.Title</h1>
-
+<style>
+    p :{
+        border = none;
+        margin = 0 0;
+        padding = 0px;
+    }
+    h1,h2 :{
+        margin = 0 0;
+        border = none;
+    }
+</style>
+<p>@news.Cathegory!.Name</p>
+<h1>@news.Title</h1>
+<p>@news.Author</p>
+<p>@news.Data</p>
 <article>
-	<h2>Lead: @news.Lead</h2>
-	<p>Article by @news.Author at the date @news.Data in cathegory @news.Cathegory!.Name</p>
+	<h2>@news.Lead</h2>
     @if (@Model.Image != "noNamer.jpg")
     {
         <img class="card-img-top" src="@Model.Image" alt="Card image cap" width="auto" height="auto">

@@ -12,19 +12,19 @@ namespace LRTV.Controllers;
 
 public class NewsController : Controller
 {
-    private readonly NewsContext _newsContext;
+    private readonly PlayersContext _context;
     private readonly IPhotoService _photoService;
     public List<NewsModel>? ListNews { get; set; }
     public NewsModel? CurrentNews { get; set; }
-    public  NewsController(NewsContext newsContext, IPhotoService photoService)
+    public  NewsController(PlayersContext context, IPhotoService photoService)
     {
-        _newsContext = newsContext;
+		_context = context;
         _photoService = photoService;
     }
     [HttpGet]
     public IActionResult Index()
     {
-		ListNews = _newsContext.News.Include(news => news.Cathegory).ToList();
+		ListNews = _context.News.Include(news => news.Cathegory).ToList();
         if (ListNews == null)
         {
             return RedirectToAction("Error", "Home");
@@ -35,7 +35,7 @@ public class NewsController : Controller
     [HttpGet]
     public IActionResult News(int NewsId)
     {
-		CurrentNews = _newsContext.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
+		CurrentNews = _context.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
         if (CurrentNews == null)
         {
             return RedirectToAction("Error", "Home");
@@ -46,7 +46,7 @@ public class NewsController : Controller
     [HttpGet]
     public IActionResult AddNews()
     {
-        List<SelectListItem> cathegories = _newsContext.Cathegories
+        List<SelectListItem> cathegories = _context.Cathegories
             .Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
 
         ViewBag.Cathegories = cathegories;
@@ -75,7 +75,7 @@ public class NewsController : Controller
         
         if (ModelState.IsValid)
         {
-            newNews.Cathegory = _newsContext.Cathegories.Where(cathegories => cathegories.Id == newNews.CathegoryID).FirstOrDefault();
+            newNews.Cathegory = _context.Cathegories.Where(cathegories => cathegories.Id == newNews.CathegoryID).FirstOrDefault();
             var result = await _photoService.AddPhotoAsyncNews(newNews.Image);
             var newsVM = new NewsModel
             {
@@ -90,14 +90,14 @@ public class NewsController : Controller
 
             };
             
-            _newsContext.News.Add(newsVM);
-            _newsContext.SaveChanges();
+            _context.News.Add(newsVM);
+            _context.SaveChanges();
             return RedirectToAction("Index");
 
         }
         else
         {
-            List<SelectListItem> cathegories = _newsContext.Cathegories
+            List<SelectListItem> cathegories = _context.Cathegories
             .Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
             ViewBag.Cathegories = cathegories;
             ModelState.AddModelError("", "Photo s a dus drq");
@@ -111,12 +111,12 @@ public class NewsController : Controller
     [HttpGet]
     public IActionResult ModifyNews(int NewsId)
     {
-		List<SelectListItem> cathegories = _newsContext.Cathegories
+		List<SelectListItem> cathegories = _context.Cathegories
 			.Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
 
 		ViewBag.Cathegories = cathegories;
 
-		NewsModel? news = _newsContext.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
+		NewsModel? news = _context.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
         if (news == null)
         {
             return RedirectToAction("Error", "Home");
@@ -129,28 +129,28 @@ public class NewsController : Controller
     {
 		if (!ModelState.IsValid)
 		{
-			List<SelectListItem> cathegories = _newsContext.Cathegories
+			List<SelectListItem> cathegories = _context.Cathegories
 			.Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
 
 			ViewBag.Cathegories = cathegories;
 			return View(news);
 		}
-		news.Cathegory = _newsContext.Cathegories.Where(cathegories => cathegories.Id == news.CathegoryID).FirstOrDefault();
-        _newsContext.Update(news);
-        _newsContext.SaveChanges();
+		news.Cathegory = _context.Cathegories.Where(cathegories => cathegories.Id == news.CathegoryID).FirstOrDefault();
+        _context.Update(news);
+        _context.SaveChanges();
         return View("News",news);
 	}
 
     [HttpGet]
     public IActionResult DeleteNews(int NewsId)
     {
-		NewsModel? news = _newsContext.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
+		NewsModel? news = _context.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
 		if (news == null)
         {
 			return RedirectToAction("Error", "Home");
 		}
-        _newsContext.Remove(news);
-        _newsContext.SaveChanges();
+        _context.Remove(news);
+        _context.SaveChanges();
         return RedirectToAction("Index");
 	}
 }
