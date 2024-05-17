@@ -9,10 +9,9 @@
 
 <article>
     <h2>
-        @* <img src="/images/@(Model.Nickname.ToLower()).jpg" alt="Image"> *@
         @if (@Model.Image != "noNamer.jpg")
         {
-            <img class="card-img-top" src="@Model.Image" alt="Card image cap" width="auto" height="auto">
+            <img class="card-img-top" src="@Model.Image" alt="Card image cap" maxwidth="200px" height="auto">
         }
         else
         {

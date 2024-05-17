@@ -1,21 +1,26 @@
 ﻿@model List<TeamModel>
 
 @{
-    List<TeamModel> teams = Model;
-    ViewData["Title"] = "team";
-
+    List<TeamModel> sortedTeams = Model.OrderBy(team => team.Ranking).ToList();
+    ViewData["Title"] = "Teams Ranking";
 }
 
-<h1>Pagina Echipa</h1>
+<h1>Teams Ranking</h1>
 
-@{
-    foreach (TeamModel team in teams)
-    {
-        <h2><a asp-controller="Teams" asp-action="Team" asp-route-teamId="@team.Id">@team.Name</a> </h2>
-        <h2><a asp-controller="Teams" asp-action="ModifyTeam" asp-route-teamId="@team.Id">Modify a team</a> </h2>
-        <h2><a asp-controller="Teams" asp-action="DeleteTeam" asp-route-teamId="@team.Id">Delete a team</a> </h2>
-        <br />
-    }
+@foreach (TeamModel team in sortedTeams)
+{
+    <div class="card border-primary mb-3" style="max-width: 20rem;">
+        <div class="card-header">@team.Ranking</div>
+        <div class="card-body">
+            <h4 class="card-title">
+                <img class="card-img-top" src="@team.Image" alt="Card image cap" style="max-width: 52px; height: auto;">
+                <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@team.Id" style="text-decoration:none; color:inherit">
+                    @team.Name</a>
+            </h4>
+            <p class="card-text"></p>
+        </div>
+    </div>
+    <br />
 }
 
-<h2><a asp-action="AddTeam">Add a new team</a></h2>
+<h3><a asp-action="AddTeam" class="btn btn-link">Add a new team</a></h3>
