@@ -39,15 +39,35 @@ public class TeamsController : Controller
         return View(Teams);
     }
 
+    //[HttpGet]
+    //public IActionResult Team(int teamId)
+    //{
+    //    teamCurent = _context.Teams.Where(team => team.Id == teamId).FirstOrDefault();
+    //    if (teamCurent == null)
+    //    {
+    //        return RedirectToAction("Error", "Home");
+    //    }
+    //    return View(teamCurent);
+    //}
+
     [HttpGet]
     public IActionResult Team(int teamId)
     {
-        teamCurent = _context.Teams.Where(team => team.Id == teamId).FirstOrDefault();
-        if (teamCurent == null)
+        var team = _context.Teams.FirstOrDefault(t => t.Id == teamId);
+        if (team == null)
         {
-            return RedirectToAction("Error", "Home");
+            return NotFound();
         }
-        return View(teamCurent);
+
+        var players = _context.Players.Where(p => p.TeamID == teamId).ToList();
+
+        var viewModel = new TeamViewModel
+        {
+            Team = team,
+            Players = players
+        };
+
+        return View(viewModel);
     }
 
     [HttpGet]
@@ -61,7 +81,7 @@ public class TeamsController : Controller
     {
         if (ModelState.IsValid)
         {
-            var result = await _photoService.AddPhotoAsyncTeams(newTeam.Image);
+            var result = await _photoService.AddPhotoAsyncTeams(newTeam.Image); 
             var teamVM = new TeamModel
             {
                 Name = newTeam.Name,
@@ -105,7 +125,7 @@ public class TeamsController : Controller
         }
         _context.Update(team);
         _context.SaveChanges();
-        return View("Team", team);
+        return RedirectToAction("Team", new {teamId = team.Id});
     }
 
     [HttpGet]

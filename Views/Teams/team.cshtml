@@ -1,26 +1,65 @@
-﻿@model TeamModel
+﻿@model LRTV.ViewModels.TeamViewModel
 
 @{
-    TeamModel team = Model;
+    var team = Model.Team;
+    var players = Model.Players;
     ViewData["Title"] = team.Name;
 }
 
-<h1>Team : @team.Name</h1>
+<style>
+    .player-container {
+        padding: 10px;
+        margin-right: 20px;
+        margin-left: 20px;
 
-<article>
-    <h2>
-        @* <img src="/images/@(Model.Nickname.ToLower()).jpg" alt="Image"> *@
-        @if (@Model.Image != "noNamer.jpg")
-        {
-            <img class="card-img-top" src="@Model.Image" alt="Card image cap" width="auto" height="auto">
-        }
-        else
-        {
-            <img class="card-img-top" src="/images/noNamer.jpg" alt="Card image cap">
-        }
-    </h2>
-    <h2>Name : @team.Name</h2>
-    <p>Cel mai tare baiat in varsta de @team.Ranking care joaca la echipa @team.Region</p>
-</article>
+    }
+</style>
 
-<a asp-action="Index">Back to home page</a>
+<div class="container mt-5">
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="row">
+                @foreach (var player in players)
+                {
+                    <div class="col-sm-2 col-md-2 text-center player-container">
+                        <img class="img-fluid" src="@player.Image" alt="@player.Nickname" style="max-width: 200px; height: auto;">
+                        <div><a asp-controller="Player" asp-action="Player" asp-route-playerId="@player.Id" style="text-decoration: none; color:inherit">@player.Nickname</a></div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <hr style="margin: 0 0;border: none; height: 10px; background-color: #8499B1;">
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                @if (team.Image != "noNamer.jpg")
+                {
+                    <img class="card-img-top" src="@team.Image" alt="Card image cap" style="max-width: 100px; height: auto;">
+                }
+                else
+                {
+                    <img class="card-img-top" src="/images/noNamer.jpg" alt="Card image cap">
+                }
+                <strong style="font-size: 36px; top: 20px;">@team.Name</strong>
+
+            </p>
+            <hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
+            <p>Current Ranking: @team.Ranking</p>
+            <hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
+            <p>Region: @team.Region</p>
+            <hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
+            <br />
+            <h3 class="mt-5">
+                <a asp-controller="Teams" asp-action="ModifyTeam" asp-route-teamId="@team.Id" class="btn btn-link">Edit Team @team.Name</a>
+                <a asp-controller="Teams" asp-action="DeleteTeam" asp-route-teamId="@team.Id" class="btn btn-link">Delete Team @team.Name</a>
+            </h3>
+            <h4 class="mt-5"><a asp-action="Index">Back to home page</a></h4>
+
+        </div>
+    </div>
+
+    
+</div>
