@@ -76,7 +76,7 @@ public class MatchesController : Controller
     }
 
     [HttpPost]
-    public IActionResult AddMatches(MatchesModel newMatch)
+    public IActionResult AddMatch(MatchesModel newMatch)
     {
 
         if (!ModelState.IsValid)
@@ -101,13 +101,23 @@ public class MatchesController : Controller
         newMatch.Team1 = _context.Teams.Where(team1 => team1.Id == newMatch.Team1Id).FirstOrDefault();
         newMatch.Team2 = _context.Teams.Where(team2 => team2.Id == newMatch.Team2Id).FirstOrDefault();
         newMatch.Map = _context.Maps.Where(map => map.Id == newMatch.MapId).FirstOrDefault();
-        _context.Add(newMatch);
-        _context.SaveChanges();
-        return RedirectToAction("Index");
+        if (newMatch.Team1.Id == newMatch.Team2.Id)
+        {
+            ModelState.AddModelError("", "Pick different Teams");
+            AddMatch();
+            return View(newMatch);
+        }
+        else
+        {
+            _context.Add(newMatch);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        
     }
 
     [HttpGet]
-    public IActionResult ModifyPlayer(int matchId)
+    public IActionResult ModifyMatch(int matchId)
     {
 
         List<SelectListItem> team1 = _context.Teams
@@ -118,7 +128,7 @@ public class MatchesController : Controller
             .Select(team2 => new SelectListItem { Text = team2.Name, Value = team2.Id.ToString() }).ToList();
         ViewBag.Teams2 = team2;
 
-        List<SelectListItem> map = _context.Teams
+        List<SelectListItem> map = _context.Maps
             .Select(map => new SelectListItem { Text = map.Name, Value = map.Id.ToString() }).ToList();
         ViewBag.Maps = map;
 
@@ -147,18 +157,27 @@ public class MatchesController : Controller
 
             ViewBag.Teams1 = team2;
 
-            List<SelectListItem> map = _context.Teams
+            List<SelectListItem> map = _context.Maps
             .Select(map => new SelectListItem { Text = map.Name, Value = map.Id.ToString() }).ToList();
 
-            ViewBag.Teams1 = map;
+            ViewBag.Maps = map;
             return View(matches);
         }
-        matches.Team1 = _context.Teams.Where(teams => teams.Id == matchCurent.Team1Id).FirstOrDefault();
-        matches.Team2 = _context.Teams.Where(teams => teams.Id == matchCurent.Team2Id).FirstOrDefault();
-        matches.Map = _context.Maps.Where(teams => teams.Id == matchCurent.MapId).FirstOrDefault();
-        _context.Update(matches);
-        _context.SaveChanges();
-        return View("Player", matches);
+        matches.Team1 = _context.Teams.Where(teams => teams.Id == matches.Team1Id).FirstOrDefault();
+        matches.Team2 = _context.Teams.Where(teams => teams.Id == matches.Team2Id).FirstOrDefault();
+        matches.Map = _context.Maps.Where(maps => maps.Id == matches.MapId).FirstOrDefault();
+        if (matches.Team1.Id == matches.Team2.Id)
+        {
+            ModelState.AddModelError("", "Pick different Teams");
+            AddMatch();
+            return View(matches);
+        }
+        else
+        {
+            _context.Add(matches);
+            _context.SaveChanges();
+            return View("Match", matches);
+        }
     }
 
     [HttpGet]

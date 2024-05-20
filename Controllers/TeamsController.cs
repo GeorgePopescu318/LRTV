@@ -137,6 +137,19 @@ public class TeamsController : Controller
             return RedirectToAction("Error", "Home");
         }
         _context.Remove(team);
+        foreach (PlayerModel player in _context.Players.Where(player => player.TeamID == team.Id).ToList())
+        {
+            player.TeamID = 0;
+            player.CurrentTeam = null;
+        }
+        foreach(MatchesModel match in _context.Matches.Where(match => match.Team1Id == team.Id).ToList())
+        {
+            _context.Remove(match);
+        }
+        foreach (MatchesModel match in _context.Matches.Where(match => match.Team2Id == team.Id).ToList())
+        {
+            _context.Remove(match);
+        }
         _context.SaveChanges();
         return RedirectToAction("Index");
     }

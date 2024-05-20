@@ -14,9 +14,9 @@ namespace LRTV
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<NewsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("NewsDB")));
+          //  builder.Services.AddDbContext<NewsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("NewsDB")));
             builder.Services.AddDbContext<PlayersContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PlayersDB")));
-            builder.Services.AddDbContext<TeamsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TeamsDB")));
+           // builder.Services.AddDbContext<TeamsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TeamsDB")));
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
             builder.Services.AddScoped<IPhotoService, PhotoService>();
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LRTV.Migrations
 {
     [DbContext(typeof(PlayersContext))]
-    [Migration("20240515194628_BezelNewMatches")]
-    partial class BezelNewMatches
+    [Migration("20240518134156_Bezel-News")]
+    partial class BezelNews
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,23 @@ namespace LRTV.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("LRTV.Models.CathegoryModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cathegories");
+                });
 
             modelBuilder.Entity("LRTV.Models.MapsModel", b =>
                 {
@@ -77,6 +94,46 @@ namespace LRTV.Migrations
                     b.HasIndex("Team2Id");
 
                     b.ToTable("Matches");
+                });
+
+            modelBuilder.Entity("LRTV.Models.NewsModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CathegoryID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Lead")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CathegoryID");
+
+                    b.ToTable("News");
                 });
 
             modelBuilder.Entity("LRTV.Models.PlayerModel", b =>
@@ -176,6 +233,17 @@ namespace LRTV.Migrations
                     b.Navigation("Team1");
 
                     b.Navigation("Team2");
+                });
+
+            modelBuilder.Entity("LRTV.Models.NewsModel", b =>
+                {
+                    b.HasOne("LRTV.Models.CathegoryModel", "Cathegory")
+                        .WithMany()
+                        .HasForeignKey("CathegoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cathegory");
                 });
 
             modelBuilder.Entity("LRTV.Models.PlayerModel", b =>

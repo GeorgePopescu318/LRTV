@@ -3,6 +3,7 @@
 @{
     PlayerModel player = Model;
     ViewData["Title"] = player.Nickname;
+    var CurrentTeamName = "";
 }
 
 <h1>Player : @player.Nickname</h1>
@@ -19,7 +20,19 @@
         }
     </h2>
     <h2>Name : @player.Name</h2>
-    <p>Cel mai tare baiat in varsta de @player.Age care joaca la echipa @player.CurrentTeam.Name cu whooping rating de @player.Rating</p>
+    <p>Cel mai tare baiat in varsta de @player.Age care joaca la echipa
+        @{
+            if (player.CurrentTeam == null){
+                CurrentTeamName = "No team";
+            }
+            else
+            {
+                CurrentTeamName = player.CurrentTeam.Name;
+            }
+                
+
+        } 
+        @CurrentTeamName cu whooping rating de @player.Rating</p>
 </article>
 
 <a asp-action="Index">Back to home page</a>

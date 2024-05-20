@@ -1,4 +1,5 @@
-﻿@model PlayerModel
+﻿@using LRTV.ViewModels
+@model ModifyPlayerViewModel
 
 @{
     ViewData["Title"] = "Modify a player";
@@ -52,6 +53,11 @@
             <label asp-for="@Model.MapsPlayed" class="control-label">Maps Played</label>
             <input asp-for="@Model.MapsPlayed" class="form-control"></input>
             <span asp-validation-for="@Model.MapsPlayed" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Image">Image</label>
+            <input asp-for="@Model.Image" type="file" class="form-control" placeholder="Image"></input>
+            <span asp-validation-for="@Model.Image" class="text-danger"></span>
         </div>
         <br />
         <input type="hidden" asp-for="@Model.Id" />
