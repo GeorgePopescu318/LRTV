@@ -2,6 +2,7 @@ using LRTV.ContextModels;
 using LRTV.Helpers;
 using LRTV.Interfaces;
 using LRTV.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 namespace LRTV
@@ -16,6 +17,13 @@ namespace LRTV
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<NewsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("NewsDB")));
             builder.Services.AddDbContext<PlayersContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PlayersDB")));
+            builder.Services.AddDbContext<UsersContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("UsersDB")));
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+               {
+                   options.LoginPath = "/Authentication/Login";
+                   options.AccessDeniedPath = "/Authentication/Forbidden/"; // to be added as a view and controller action
+               });
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
             builder.Services.AddScoped<IPhotoService, PhotoService>();
 
