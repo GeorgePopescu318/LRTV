@@ -15,7 +15,7 @@
     }
 </style>
 
-<div class="container mt-5">
+<div class="container   ">
     <div class="row mt-4">
         <div class="col-md-12">
             <div class="row">
@@ -52,11 +52,12 @@
             <p>Region: @team.Region</p>
             <hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
             <br />
-            <h3 class="mt-5">
-                <a asp-controller="Teams" asp-action="ModifyTeam" asp-route-teamId="@team.Id" class="btn btn-link">Edit Team @team.Name</a>
-                <a asp-controller="Teams" asp-action="DeleteTeam" asp-route-teamId="@team.Id" class="btn btn-link">Delete Team @team.Name</a>
+            <h3 style="margin-top:150px; text-align:right; text-decoration:none; color:inherit">
+                <a asp-controller="Teams" asp-action="ModifyTeam" asp-route-teamId="@team.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Edit Team @team.Name</a>
+                <a asp-controller="Teams" asp-action="DeleteTeam" asp-route-teamId="@team.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Delete Team @team.Name</a>
             </h3>
-            <h4 class="mt-5"><a asp-action="Index">Back to home page</a></h4>
+            <p style="margin-top:100px; text-align:center"><a asp-action="Index">Back to home page</a></p>
+
 
         </div>
     </div>

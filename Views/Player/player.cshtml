@@ -5,21 +5,85 @@
     ViewData["Title"] = player.Nickname;
 }
 
-<h1>Player : @player.Nickname</h1>
+<style>
+    .container {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        width = 100%
+    }
+    main{
+        margin-left:120px;
+    }
 
-<article>
-    <h2>
-        @if (@Model.Image != "noNamer.jpg")
+    .details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .detail-line {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .info-cell {
+        padding: 10px;
+        border: 1px solid transparent;
+        text-align: center;
+    }
+</style>
+
+<div class="container mt-5">
+    <div style="margin-top:16px">
+        @if (Model.Image != "noNamer.jpg")
         {
-            <img class="card-img-top" src="@Model.Image" alt="Card image cap" maxwidth="200px" height="auto">
+            <img class="card-img-top" src="@Model.Image" alt="Card image cap" style="max-width: 200px; height: auto;">
         }
         else
         {
-            <img class="card-img-top" src="/images/noNamer.jpg" alt="Card image cap">
+            <img class="card-img-top" src="/images/noNamer.jpg" alt="Card image cap" style="max-width: 200px; height: auto;">
         }
-    </h2>
-    <h2>Name : @player.Name</h2>
-    <p>Cel mai tare baiat in varsta de @player.Age care joaca la echipa @player.CurrentTeam.Name cu whooping rating de @player.Rating</p>
-</article>
+        <hr style="margin: 0 0; border: none; height: 10px; background-color: #8499B1;">
+    </div>
+    <div class="details mt-4">
+        <h1 style="margin-right:700px">@player.Nickname</h1>
+        <p class="mt-4" style="text-align:left;">   
+            Current Team:
+            <span style="float:right;"><a asp-controller="Teams" asp-action="Team" asp-route-teamId="@player.TeamID"
+                   style="text-decoration:none; color:inherit">@player.CurrentTeam.Name</a>
+            
+            <img class="card-img-top" src="@player.CurrentTeam.Image" alt="Card image cap" style="max-width: 30px; height: auto;">
+            </span>
+        </p>
+        <hr style="margin: 0 0; border: none; height: 2px; background-color: #8499B1;">
+        <p class="ach mt-4" style="text-align:left;">Achievements: <span style="float:right">@player.Achievements</span></p>
+        <hr style="margin: 0 0; border: none; height: 10px; background-color: #8499B1;">
+    </div>
+</div>
 
-<a asp-action="Index">Back to home page</a>
+<div class="info-grid">
+    <div class="info-cell">Name: @player.Name</div>
+    <div class="info-cell">Maps Played: @player.MapsPlayed</div>
+    <div class="info-cell">Rating: @player.Rating</div>
+    <div class="info-cell">Age: @player.Age</div>
+    <div class="info-cell">K/D: @player.KD</div>
+    <div class="info-cell">Headshots: @player.Headshots %</div>
+    
+</div>
+
+<h3 style="margin-top:70px">
+    <span style="float:right">
+    <a asp-controller="Player" asp-action="ModifyPlayer" asp-route-playerId="@player.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Edit player @player.Nickname</a>
+    <a asp-controller="Player" asp-action="DeletePlayer" asp-route-playerId="@player.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Delete player @player.Nickname</a>
+    </span>
+</h3>
+<br />
+<p style="text-align:center; margin-top:100px"><a asp-action="Index">Back to home page</a></p>

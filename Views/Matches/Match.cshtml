@@ -1,12 +1,126 @@
-﻿@model MatchesModel
+﻿@model LRTV.ViewModels.MatchTeamLineupsViewModel
+
+@using static LRTV.Controllers.MatchesController
 
 @{
-    MatchesModel match = Model;
+    var match = Model.Match;
+    var lineupT1 = Model.LineupTeam1;
+    var lineupT2 = Model.LineupTeam2;
     ViewData["Title"] = match.Team1.Name + " vs. " + match.Team2.Name;
+
+
+    string colorTeam1 = match.ScoreTeam1 > match.ScoreTeam2 ? "green" : "red";
+    string colorTeam2 = match.ScoreTeam1 < match.ScoreTeam2 ? "green" : "red";
 }
 
-<h1>@match.Team1.Name vs. @match.Team2.Name</h1>
-<h3>@match.DateTime</h3>
-<h2>@match.ScoreTeam1 @match.ScoreTeam2</h2>    
+<style>
+    .match-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-<a asp-action="Index">Back to home page</a>
+    .team1 {
+        flex: 1;
+        text-align: left;
+    }
+
+    .team2 {
+        flex: 1;
+        text-align: right;
+    }
+
+    .score-and-date-time {
+        flex: 1;
+        text-align: center;
+    }
+
+    .player-container {
+        padding: 10px;
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+
+</style>
+
+
+<div class="mt-5 match-container">
+    <div class="team1">
+        <img src="@match.Team1.Image" alt="@match.Team1.Name" style="max-width: 150px; height: auto; text-align:center;">
+        <h1 class="mt-2">
+            <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@match.Team1.Id" style="text-decoration:none; color:inherit">@match.Team1.Name</a>
+        </h1>
+    </div>
+    <div class="score-and-date-time">
+        <h2><span style="font-size:56px; color:@colorTeam1">@match.ScoreTeam1</span> - <span style="font-size:56px; color:@colorTeam2">@match.ScoreTeam2</span></h2>
+        <h5 style="text-align:center;">@match.DateTime.Date.ToShortDateString()</h5>
+        <h5 style="text-align:center;">@match.DateTime.Date.ToShortTimeString()</h5>
+    </div>
+    <div class="team2">
+        <img src="@match.Team2.Image" alt="@match.Team2.Name" style="max-width: 150px; height: auto;">
+        <h1 class="mt-2">
+            <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@match.Team2.Id" style="text-decoration:none; color:inherit">@match.Team2.Name</a>
+        </h1>
+    </div>
+
+</div>
+<hr style="margin: 0 0;border: none; height: 15px; background-color: #8499B1;">
+
+<div class="map" style="margin-top:100px">
+    <div>
+    <span style="font-size:24px;">Map Played : @match.Map.Name</span>
+        <span style="text-align:right"><img src="/images/@(match.Map.Name.ToLower()).jpg" style="max-width:300px; height:auto; text-align:center" alt="Image"></span>
+    </div>
+
+</div>
+
+@{
+    <div class="mt-5">
+    <h3>Lineups</h3>
+        <p class= "mt-2">
+        <span style="text-align:left">
+            <img src="@match.Team1.Image" alt="@match.Team1.Name" style="max-width: 36px; height: auto; text-align:center;">
+            <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@match.Team1.Id" style="text-decoration:none; color:inherit">@match.Team1.Name</a>
+        </span>
+            <span style="float:right">World Ranking: <b>#@match.Team1.Ranking</b></span>
+        </p>
+    
+    <hr style="margin: 0 0;border: none; height: 5px; background-color: #8499B1;">
+        <div class="row">
+        @foreach (var player in Model.LineupTeam1)
+        {
+            <div class="mt-2 col-sm-2 col-md-2 text-center player-container">
+                <img class="img-fluid" src="@player.Image" alt="@player.Nickname" style="max-width: 200px; height: auto;">
+                <div><a asp-controller="Player" asp-action="Player" asp-route-playerId="@player.Id" style="text-decoration: none; color:inherit">@player.Nickname</a></div>
+            </div>
+        }
+        </div>
+
+    <p class="mt-3">
+         <span stle="text-align:left">
+            <img src="@match.Team2.Image" alt="@match.Team2.Name" style="max-width: 36px; height: auto; text-align:center;">
+            <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@match.Team2.Id" style="text-decoration:none; color:inherit">@match.Team2.Name</a>
+         </span>
+         <span style="float:right">World Ranking: <b>#@match.Team2.Ranking</b></span>
+    </p>
+        <hr style="margin: 0 0;border: none; height: 5px; background-color: #8499B1;">
+        <div class="row">
+        @foreach (var player in Model.LineupTeam2)
+        {
+            <div class="col-sm-2 col-md-2 text-center player-container">
+                <img class="img-fluid" src="@player.Image" alt="@player.Nickname" style="max-width: 200px; height: auto;">
+                <div><a asp-controller="Player" asp-action="Player" asp-route-playerId="@player.Id" style="text-decoration: none; color:inherit">@player.Nickname</a></div>
+            </div>
+        }
+        </div>
+    </div>
+}
+
+
+
+<h3 style="margin-top:150px; text-align:right">
+    <a asp-controller="Matches" asp-action="ModifyMatch" asp-route-MatchId="@match.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Modify Match</a>
+    <a asp-controller="Matches" asp-action="DeleteMatch" asp-route-MatchId="@match.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Delete Match</a>
+</h3>
+
+<p style="margin-top:100px; text-align:center"><a asp-action="Index">Back to home page</a></p>

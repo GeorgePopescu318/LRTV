@@ -52,23 +52,47 @@ public class NewsController : Controller
         ViewBag.Cathegories = cathegories;
         return View(CurrentNews);
     }
- //   [HttpPost]
- //   public IActionResult AddNews(NewsModel newNews) { 
 
- //       if (!ModelState.IsValid)
- //       {
-	//		List<SelectListItem> cathegories = _newsContext.Cathegories
-	//		.Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
+    public IActionResult SortCat(int? categoryId)
+    {
+        var news = _context.News.Include(n => n.Cathegory).AsQueryable();
 
-	//		ViewBag.Cathegories = cathegories;
-	//		return View(newNews);
- //       }
+        if (categoryId.HasValue)
+        {
+            news = news.Where(n => n.CathegoryID == categoryId);
+        }
 
- //       newNews.Cathegory = _newsContext.Cathegories.Where(cathegories => cathegories.Id== newNews.CathegoryID).FirstOrDefault();
- //       _newsContext.Add(newNews);
- //       _newsContext.SaveChanges();
- //       return RedirectToAction("Index");
-	//}
+        var viewModel = news.ToList();
+        ViewBag.SelectedCategoryId = categoryId;
+
+        // Specify the name of the view explicitly
+        return View("Index", viewModel);
+    }
+
+    [HttpPost]
+    public IActionResult SortCatPost(int? categoryId)
+    {
+        return RedirectToAction("SortCat", new { categoryId });
+    }
+
+
+    //   [HttpPost]
+    //   public IActionResult AddNews(NewsModel newNews) { 
+
+    //       if (!ModelState.IsValid)
+    //       {
+    //		List<SelectListItem> cathegories = _newsContext.Cathegories
+    //		.Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
+
+    //		ViewBag.Cathegories = cathegories;
+    //		return View(newNews);
+    //       }
+
+    //       newNews.Cathegory = _newsContext.Cathegories.Where(cathegories => cathegories.Id== newNews.CathegoryID).FirstOrDefault();
+    //       _newsContext.Add(newNews);
+    //       _newsContext.SaveChanges();
+    //       return RedirectToAction("Index");
+    //}
 
     public async Task<IActionResult> AddNews(CreateNewsViewModel newNews)
     {

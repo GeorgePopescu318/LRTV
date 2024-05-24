@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Query;
+using CloudinaryDotNet;
 
 
 namespace LRTV.Controllers;
@@ -23,13 +24,6 @@ public class MatchesController : Controller
     public MatchesController(PlayersContext context)
     {
         _context = context;
-    }
-
-    public IActionResult DisplayImage(string imageName)
-    {
-        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", imageName);
-        var imageFileStream = System.IO.File.OpenRead(imagePath);
-        return File(imageFileStream, "image/jpeg");
     }
 
 
@@ -48,12 +42,34 @@ public class MatchesController : Controller
     [HttpGet]
     public IActionResult Match(int matchId)
     {
-        matchCurent = _context.Matches.Where(match => match.Id == matchId).Include(match => match.Team1).Include(match => match.Team2).Include(match => match.Map).FirstOrDefault();
-        if (matchCurent == null)
+        var match = _context.Matches
+            .Include(match => match.Team1)
+            .Include(match => match.Team2)
+            .Include(match => match.Map)
+            .FirstOrDefault(match => match.Id == matchId);
+
+        if (match == null)
         {
-            return RedirectToAction("Error", "Home");
+            return NotFound();
         }
-        return View(matchCurent);
+
+        var team1Lineup = ViewLineup(match.Team1.Id);
+        var team2Lineup = ViewLineup(match.Team2.Id);
+
+        var viewModel = new MatchTeamLineupsViewModel
+        {
+            Match = match,
+            LineupTeam1 = team1Lineup,
+            LineupTeam2 = team2Lineup,
+        };
+
+        return View(viewModel);
+    }
+
+    public List<PlayerModel> ViewLineup(int teamID)
+    {
+        var players = _context.Players.Where(player => player.TeamID == teamID).ToList();
+        return players;
     }
 
     [HttpGet]
@@ -74,6 +90,8 @@ public class MatchesController : Controller
         ViewBag.Maps = map;
         return View();
     }
+
+
 
     [HttpPost]
     public IActionResult AddMatches(MatchesModel newMatch)
@@ -158,6 +176,7 @@ public class MatchesController : Controller
         matches.Map = _context.Maps.Where(teams => teams.Id == matchCurent.MapId).FirstOrDefault();
         _context.Update(matches);
         _context.SaveChanges();
+        //return RedirectToAction("Player", new { matchId= matches.Id });
         return View("Player", matches);
     }
 

@@ -1,23 +1,52 @@
 ﻿@model List<NewsModel>
 
 @{
-	List<NewsModel> news = Model;
-	ViewData["Title"] = "news";
+    var news = Model.OrderByDescending(news => news.Data).ToList();
+    int? selectedCategoryId = ViewBag.SelectedCategoryId;
+    DateTime? previousDate = null;
 
-
-
+    ViewData["Title"] = "news";
 }
 
 <h1>Today's news</h1>
 
-@{
-	foreach(NewsModel singularNews in news)
-	{
-		<h2><a asp-controller="News" asp-action="News" asp-route-NewsId="@singularNews.Id">@singularNews.Title</a></h2>
-		<h2><a asp-controller="News" asp-action="ModifyNews" asp-route-NewsId="@singularNews.Id">Modify News</a></h2>
-		<h2><a asp-controller="News" asp-action="DeleteNews" asp-route-NewsId="@singularNews.Id">DeleteNews</a></h2>
-		<br/>
-	}
-}
+<form asp-action="SortCatPost" method="post">
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
 
-<h2> <a asp-action="AddNews"> Add News</a></h2>
+        <input type="radio" class="btn-check" name="categoryId" value="1" id="Transfers" autocomplete="off" @(selectedCategoryId == 1 ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="Transfers">Transfers</label>
+
+        <input type="radio" class="btn-check" name="categoryId" value="2" id="Events" autocomplete="off" @(selectedCategoryId == 2 ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="Events">Events</label>
+
+        <input type="radio" class="btn-check" name="categoryId" value="3" id="Matches" autocomplete="off" @(selectedCategoryId == 3 ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="Matches">Matches</label>
+
+        <input type="radio" class="btn-check" name="categoryId" value="4" id="GameRelated" autocomplete="off" @(selectedCategoryId == 3 ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="GameRelated">Game Updates</label>
+
+        <input type="radio" class="btn-check" name="categoryId" value="" id="all" autocomplete="off" @(selectedCategoryId == null ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="all">All</label>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Filter</button>
+</form>
+
+<div>
+    @foreach (var singularNews in news)
+    {
+        if (previousDate != singularNews.Data.Date)
+        {
+            <h2 class="mt-5" style="font-size:24px">For @singularNews.Data.Date.ToShortDateString()</h2>
+            <hr style="margin: 0 0;border: none; height: 10px; background-color: #8499B1;">
+        }
+        previousDate = singularNews.Data.Date;
+
+        <h2 style="margin-left:20px">
+            <a asp-controller="News" asp-action="News" asp-route-NewsId="@singularNews.Id" style="text-decoration:none; color:inherit">@singularNews.Title</a>
+        </h2>
+        <hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
+        <br />
+    }
+</div>
+
+<h3 class="mt-5" style="text-align:right"> <a asp-action="AddNews" class="btn btn-link" style="text-decoration:none; color:inherit"> Add News</a></h3>

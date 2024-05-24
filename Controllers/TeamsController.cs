@@ -71,6 +71,12 @@ public class TeamsController : Controller
     }
 
     [HttpGet]
+    public IActionResult ViewLineup(int playerId)
+    {
+        return View();
+    }
+
+    [HttpGet]
     public IActionResult AddTeam()
     {
         return View();
