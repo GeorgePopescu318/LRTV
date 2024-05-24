@@ -159,7 +159,8 @@ public class PlayerController : Controller
             }
            
         }
-        var photoResult = await _photoService.AddPhotoAsyncPlayers(playerVM.Image);
+        //var photoResult = await _photoService.AddPhotoAsyncPlayers(playerVM.Image);
+        Console.Write("poza");
         var player = new PlayerModel
         {
             Nickname = playerVM.Nickname,
@@ -171,8 +172,8 @@ public class PlayerController : Controller
             Rating = playerVM.Rating,
             Headshots = playerVM.Headshots,
             KD = playerVM.KD,
-            MapsPlayed = playerVM.MapsPlayed,
-            Image = photoResult.Url.ToString()
+            MapsPlayed = playerVM.MapsPlayed
+            //Image = photoResult.Url.ToString()
 
         };
 

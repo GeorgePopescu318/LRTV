@@ -16,5 +16,5 @@ public class ModifyPlayerViewModel
     public float KD { get; set; }
     public int MapsPlayed { get; set; }
     public string? Url { get; set; }
-    public IFormFile Image { get; set; }
+    public IFormFile? Image { get; set; }
 }

@@ -3,9 +3,7 @@
 @{
 	List<NewsModel> news = Model;
 	ViewData["Title"] = "news";
-
-
-
+	string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 }
 
 <h1>Today's news</h1>
@@ -14,10 +12,19 @@
 	foreach(NewsModel singularNews in news)
 	{
 		<h2><a asp-controller="News" asp-action="News" asp-route-NewsId="@singularNews.Id">@singularNews.Title</a></h2>
-		<h2><a asp-controller="News" asp-action="ModifyNews" asp-route-NewsId="@singularNews.Id">Modify News</a></h2>
-		<h2><a asp-controller="News" asp-action="DeleteNews" asp-route-NewsId="@singularNews.Id">DeleteNews</a></h2>
+
+		@if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin")
+		{
+			<h2><a asp-controller="News" asp-action="ModifyNews" asp-route-NewsId="@singularNews.Id">Modify News</a></h2>
+			<h2><a asp-controller="News" asp-action="DeleteNews" asp-route-NewsId="@singularNews.Id">DeleteNews</a></h2>
+		}
 		<br/>
 	}
 }
 
-<h2> <a asp-action="AddNews"> Add News</a></h2>
+<h2>
+	@if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin")
+	{
+		<a class="btn btn-primary" asp-action="AddNews"> Add News</a>
+	}
+</h2>

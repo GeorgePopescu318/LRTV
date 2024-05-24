@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LRTV.ContextModels;
 
-public class PlayersContext : DbContext {
+public class PlayersContext : DbContext 
+{
 
     public PlayersContext(DbContextOptions<PlayersContext> options) : base(options) { 
     }
