@@ -15,25 +15,33 @@
         margin = 0 0;
         border = none;
     }
-</style>
-<p>@news.Cathegory!.Name</p>
-<h1>@news.Title</h1>
-<p>@news.Author</p>
-<p>@news.Data</p>
-<article>
-	<h2>@news.Lead</h2>
-    @if (@Model.Image != "noNamer.jpg")
-    {
-        <img class="card-img-top" src="@Model.Image" alt="Card image cap" width="auto" height="auto">
+
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
     }
-    else
-    {
+</style>
+<h1 class="mt-5" style="text-align:center; font-size:64px; font-weight: bold">@news.Title.ToUpper()</h1>
+<p>
+    <span style="font-size:12px; text-align:left">@news.Author</span>
+    <span style="font-size:12px; float:right">@news.Cathegory.Name</span>
+</p>
+<p style="font-size:12px; float:right">@news.Data</p>
+<article>
+	<h2 style="margin-top:50px">@news.Lead</h2>
+    @if (@Model.Image != "noNamer.jpg"){
+        <img class="card-img-top" src="@Model.Image" alt="Card image cap" style="max-width: 1000px; height: auto; display:block; margin-left:auto; margin-right:auto; width:60%">
+    }
+    else{
         <img class="card-img-top" src="/images/noNamer.jpg" alt="Card image cap">
     }
+    <div class="mt-5">
     @try
     {
         if (!string.IsNullOrEmpty(Model.Body))
-        {
+        {   
             <div id="main">@Html.Raw(Markdown.ToHtml(Model.Body))</div>
         }
     }
@@ -41,6 +49,14 @@
     {
         <div>No body</div>
     }
+    </div>
 </article>
 
-<a asp-action="Index">Back to Today's news</a>
+
+
+<h3 style="margin-top:150px; text-align:right">
+    <a asp-controller="News" asp-action="ModifyNews" asp-route-NewsId="@Model.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Modify News</a>
+    <a asp-controller="News" asp-action="DeleteNews" asp-route-NewsId="@Model.Id" class="btn btn-link" style="text-decoration:none; color:inherit">DeleteNews</a>
+</h3>
+
+<p style="margin-top:100px; text-align:center"><a asp-action="Index">Back to home page</a></p>

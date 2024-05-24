@@ -1,23 +1,35 @@
 ﻿@model List<MatchesModel>
 
 @{
-	List<MatchesModel> matches = Model;
-	ViewData["Title"] = "matches";
-
-
-
+	List<MatchesModel> matches = Model.OrderByDescending(match => match.DateTime).ToList();
+	ViewData["Title"] = "Matches";
 }
 
 <h1>Latest Matches</h1>
 
-@{
-	foreach (MatchesModel  match in matches)
-	{
-		<h2><a asp-controller="Matches" asp-action="Match" asp-route-MatchId="@match.Id">@match.Team1.Name vs @match.Team2.Name</a></h2>
-		<h2><a asp-controller="Matches" asp-action="ModifyMatch" asp-route-MatchId="@match.Id">Modify Match</a></h2>
-		<h2><a asp-controller="Matches" asp-action="DeleteMatch" asp-route-MatchId="@match.Id">Delete Match</a></h2>
+<div class="mt-5">
+	@{
+		DateTime? previousDate = null;
+		foreach (MatchesModel  match in matches)
+		{
+			string colorTeam1 = match.ScoreTeam1 > match.ScoreTeam2 ? "green" : "red";
+			string colorTeam2 = match.ScoreTeam1 < match.ScoreTeam2 ? "green" : "red";
+
+			if (previousDate != match.DateTime.Date)
+			{
+				<h2 class="mt-5">Result for @match.DateTime.Date.ToShortDateString()</h2>
+				<hr style="margin: 0 0;border: none; height: 10px; background-color: #8499B1;">
+			}
+			previousDate = match.DateTime.Date;
+			<h2 style="margin-left:20px">
+			<a asp-controller="Matches" asp-action="Match" asp-route-MatchId="@match.Id" style="text-decoration:none; color:inherit">
+					@match.Team1.Name <img class="card-img-top" src="@match.Team1.Image" alt="Card image cap" style="max-width: 52px; height: auto;">
+					<span style= "font-size:30px; color:@colorTeam1;"> @match.ScoreTeam1</span> - <span style="font-size:30px; color:@colorTeam2;">@match.ScoreTeam2 </span>
+					<img class="card-img-top" src="@match.Team2.Image" alt="Card image cap" style="max-width: 52px; height: auto;"> @match.Team2.Name
+			</a></h2>
+			<hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
 		<br />
 	}
 }
-
-<h2> <a asp-action="AddMatch"> Add Match</a></h2>
+</div>
+<h3 class="mt-5" style="text-align:right"><a asp-action="AddMatch" class="btn btn-link" style="text-decoration:none; color:inherit"> Add Match</a></h3>

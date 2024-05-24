@@ -29,14 +29,6 @@ public class PlayerController : Controller
         _photoService = photoService;
     }
 
-    public IActionResult DisplayImage(string imageName)
-    {
-        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", imageName);
-        var imageFileStream = System.IO.File.OpenRead(imagePath);
-        return File(imageFileStream, "image/jpeg");
-    }
-
-
     [HttpGet]
     public IActionResult Index()
     {

@@ -10,12 +10,11 @@
 @foreach (TeamModel team in sortedTeams)
 {
     <div class="card border-primary mb-3" style="max-width: 20rem;">
-        <div class="card-header">@team.Ranking</div>
+        <div class="card-header"><b>@team.Ranking</b></div>
         <div class="card-body">
             <h4 class="card-title">
                 <img class="card-img-top" src="@team.Image" alt="Card image cap" style="max-width: 52px; height: auto;">
-                <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@team.Id" style="text-decoration:none; color:inherit">
-                    @team.Name</a>
+                <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@team.Id" style="text-decoration:none; color:inherit">@team.Name</a>
             </h4>
             <p class="card-text"></p>
         </div>
@@ -23,4 +22,4 @@
     <br />
 }
 
-<h3><a asp-action="AddTeam" class="btn btn-link">Add a new team</a></h3>
+<h3><a asp-action="AddTeam" class="btn btn-link" style="text-decoration:none; color:inherit">Add a new team</a></h3>
