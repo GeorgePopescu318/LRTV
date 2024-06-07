@@ -15,4 +15,6 @@ public class NewsModel
     public CathegoryModel? Cathegory { get; set; }
 
     public string? Image {  get; set; }
+
+    public virtual ICollection<CommentsModel> Comments { get; set; }
 }

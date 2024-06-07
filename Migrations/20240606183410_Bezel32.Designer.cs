@@ -4,6 +4,7 @@ using LRTV.ContextModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LRTV.Migrations
 {
     [DbContext(typeof(PlayersContext))]
-    partial class UsersContextModelSnapshot : ModelSnapshot
+    [Migration("20240606183410_Bezel32")]
+    partial class Bezel32
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,9 +50,6 @@ namespace LRTV.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("NewsModelId")
-                        .HasColumnType("int");
-
                     b.Property<int>("newsId")
                         .HasColumnType("int");
 
@@ -60,16 +60,13 @@ namespace LRTV.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
-
                     b.Property<string>("userName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NewsModelId");
+                    b.HasIndex("newsId");
 
                     b.ToTable("Comments");
                 });
@@ -273,9 +270,13 @@ namespace LRTV.Migrations
 
             modelBuilder.Entity("LRTV.Models.CommentsModel", b =>
                 {
-                    b.HasOne("LRTV.Models.NewsModel", null)
+                    b.HasOne("LRTV.Models.NewsModel", "News")
                         .WithMany("Comments")
-                        .HasForeignKey("NewsModelId");
+                        .HasForeignKey("newsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("News");
                 });
 
             modelBuilder.Entity("LRTV.Models.MatchesModel", b =>

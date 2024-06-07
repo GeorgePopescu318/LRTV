@@ -2,8 +2,8 @@
 @using Markdig
 @using System.Web
 @{
-	NewsModel news = Model;
-	ViewData["Title"] = news.Title;
+    NewsModel news = Model;
+    ViewData["Title"] = news.Title;
 }
 <style>
     p :{
@@ -53,10 +53,12 @@
 </article>
 
 
-
 <h3 style="margin-top:150px; text-align:right">
     <a asp-controller="News" asp-action="ModifyNews" asp-route-NewsId="@Model.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Modify News</a>
     <a asp-controller="News" asp-action="DeleteNews" asp-route-NewsId="@Model.Id" class="btn btn-link" style="text-decoration:none; color:inherit">DeleteNews</a>
 </h3>
+
+
+
 
 <p style="margin-top:100px; text-align:center"><a asp-action="Index">Back to home page</a></p>

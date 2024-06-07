@@ -1,4 +1,5 @@
-﻿using LRTV.ContextModels;
+﻿using CloudinaryDotNet;
+using LRTV.ContextModels;
 using LRTV.Interfaces;
 using LRTV.Models;
 using LRTV.Services;
@@ -7,7 +8,6 @@ using Markdig;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-
 namespace LRTV.Controllers;
 
 public class NewsController : Controller
@@ -29,17 +29,21 @@ public class NewsController : Controller
         {
             return RedirectToAction("Error", "Home");
         }
+
         return View(ListNews);
     }
 
     [HttpGet]
     public IActionResult News(int NewsId)
     {
-		CurrentNews = _context.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
+        
+        CurrentNews = _context.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
+        //var comments = ViewComments(NewsId);
+
         if (CurrentNews == null)
         {
             return RedirectToAction("Error", "Home");
-        }
+        } 
         return View(CurrentNews);
     }
 
@@ -75,24 +79,7 @@ public class NewsController : Controller
         return RedirectToAction("SortCat", new { categoryId });
     }
 
-
-    //   [HttpPost]
-    //   public IActionResult AddNews(NewsModel newNews) { 
-
-    //       if (!ModelState.IsValid)
-    //       {
-    //		List<SelectListItem> cathegories = _newsContext.Cathegories
-    //		.Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
-
-    //		ViewBag.Cathegories = cathegories;
-    //		return View(newNews);
-    //       }
-
-    //       newNews.Cathegory = _newsContext.Cathegories.Where(cathegories => cathegories.Id== newNews.CathegoryID).FirstOrDefault();
-    //       _newsContext.Add(newNews);
-    //       _newsContext.SaveChanges();
-    //       return RedirectToAction("Index");
-    //}
+    
 
     public async Task<IActionResult> AddNews(CreateNewsViewModel newNews)
     {
@@ -148,22 +135,38 @@ public class NewsController : Controller
         return View(news);
 	}
 
+
     [HttpPost]
     public IActionResult ModifyNews(NewsModel news)
     {
-		if (!ModelState.IsValid)
-		{
-			List<SelectListItem> cathegories = _context.Cathegories
-			.Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
+        if (!ModelState.IsValid)
+        {
+            List<SelectListItem> cathegories = _context.Cathegories
+                .Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
 
-			ViewBag.Cathegories = cathegories;
-			return View(news);
-		}
-		news.Cathegory = _context.Cathegories.Where(cathegories => cathegories.Id == news.CathegoryID).FirstOrDefault();
-        _context.Update(news);
+            ViewBag.Cathegories = cathegories;
+            return View(news);
+        }
+
+        var existingNews = _context.News.FirstOrDefault(n => n.Id == news.Id);
+        if (existingNews == null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
+
+        // Update fields excluding the image
+        existingNews.Title = news.Title;
+        existingNews.Lead = news.Lead;
+        existingNews.Author = news.Author;
+        existingNews.Body = news.Body;
+        existingNews.Data = news.Data;
+        existingNews.CathegoryID = news.CathegoryID;
+        existingNews.Cathegory = _context.Cathegories.FirstOrDefault(c => c.Id == news.CathegoryID);
+
+        _context.Update(existingNews);
         _context.SaveChanges();
-        return View("News",news);
-	}
+        return View("News", existingNews);
+    }
 
     [HttpGet]
     public IActionResult DeleteNews(int NewsId)

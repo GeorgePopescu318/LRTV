@@ -17,4 +17,5 @@ public class CreateNewsViewModel
     public CathegoryModel? Cathegory { get; set; }
 
     public IFormFile Image { get; set; }
+
 }

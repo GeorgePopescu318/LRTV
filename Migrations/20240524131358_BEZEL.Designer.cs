@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LRTV.Migrations
 {
-    [DbContext(typeof(UsersContext))]
+    [DbContext(typeof(PlayersContext))]
     [Migration("20240524131358_BEZEL")]
     partial class BEZEL
     {

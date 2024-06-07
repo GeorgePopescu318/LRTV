@@ -4,6 +4,7 @@ using LRTV.ContextModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LRTV.Migrations
 {
     [DbContext(typeof(PlayersContext))]
-    partial class UsersContextModelSnapshot : ModelSnapshot
+    [Migration("20240606173712_Bezel22")]
+    partial class Bezel22
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,41 +40,6 @@ namespace LRTV.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cathegories");
-                });
-
-            modelBuilder.Entity("LRTV.Models.CommentsModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("NewsModelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("newsId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("postedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("userName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NewsModelId");
-
-                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("LRTV.Models.MapsModel", b =>
@@ -271,13 +239,6 @@ namespace LRTV.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("LRTV.Models.CommentsModel", b =>
-                {
-                    b.HasOne("LRTV.Models.NewsModel", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("NewsModelId");
-                });
-
             modelBuilder.Entity("LRTV.Models.MatchesModel", b =>
                 {
                     b.HasOne("LRTV.Models.MapsModel", "Map")
@@ -317,11 +278,6 @@ namespace LRTV.Migrations
                         .HasForeignKey("CurrentTeamId");
 
                     b.Navigation("CurrentTeam");
-                });
-
-            modelBuilder.Entity("LRTV.Models.NewsModel", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

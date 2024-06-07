@@ -106,124 +106,59 @@ public class PlayerController : Controller
     [HttpGet]
     public IActionResult ModifyPlayer(int playerId)
     {
-
         List<SelectListItem> teams = _context.Teams
-            .Select(teams => new SelectListItem { Text = teams.Name, Value = teams.Id.ToString() }).ToList();
+            .Select(team => new SelectListItem { Text = team.Name, Value = team.Id.ToString() })
+            .ToList();
         ViewBag.Teams = teams;
 
-        PlayerModel? players = _context.Players.Where(players => players.Id == playerId).Include(players => players.CurrentTeam).FirstOrDefault();
+        PlayerModel? player = _context.Players
+            .Where(p => p.Id == playerId)
+            .Include(p => p.CurrentTeam)
+            .FirstOrDefault();
 
-        if (players == null)
+        if (player == null)
         {
             return RedirectToAction("Error", "Home");
         }
 
-        return View(players);
+        return View(player);
     }
 
 
-    //[HttpPost]
-    //public async Task<IActionResult> ModifyPlayer(int playerId, ModifyPlayerViewModel playerVM)
-
-    //{
-    //    List<SelectListItem> teams = _context.Teams
-    //        .Select(teams => new SelectListItem { Text = teams.Name, Value = teams.Id.ToString() }).ToList();
-    //    PlayerModel? players = _context.Players.Where(players => players.Id == playerId).Include(players => players.CurrentTeam).FirstOrDefault();
-    //    ViewBag.Teams = teams;
-
-    //    if (!ModelState.IsValid)
-    //    {
-    //        ModelState.AddModelError("", "Failed to modify player");
-    //        return View("ModifyPlayer", playerVM);
-    //    }
-
-
-
-    //    if (players != null) { 
-
-    //        try
-    //        {
-    //            await _photoService.DeletPhotoAsync(players.Image);
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            ModelState.AddModelError("", "Failed to modify player again");
-    //            return View(playerVM);
-    //        }
-
-    //    }
-    //    //var photoResult = await _photoService.AddPhotoAsyncPlayers(playerVM.Image);
-    //    Console.Write("poza");
-    //    var player = new PlayerModel
-    //    {
-    //        Nickname = playerVM.Nickname,
-    //        Name = playerVM.Name,
-    //        Age = playerVM.Age,
-    //        TeamID = playerVM.TeamID,
-    //        CurrentTeam = playerVM.CurrentTeam,
-    //        Achievements = playerVM.Achievements,
-    //        Rating = playerVM.Rating,
-    //        Headshots = playerVM.Headshots,
-    //        KD = playerVM.KD,
-    //        MapsPlayed = playerVM.MapsPlayed
-    //        //Image = photoResult.Url.ToString()
-
-    //    };
-
-    //    _context.Update(player);
-    //    _context.SaveChanges();
-    //    return View("Player", players);
-
-    //}
-
-    //[HttpGet]
-
-    //public async Task<IActionResult> ModifyPlayer(int playerId)
-    //{
-    //    PlayerModel? player = _context.Players.Where(players => players.Id == playerId).Include(players => players.CurrentTeam).FirstOrDefault();
-    //    List<SelectListItem> teams = _context.Teams
-    //        .Select(teams => new SelectListItem { Text = teams.Name, Value = teams.Id.ToString() }).ToList();
-    //    ViewBag.Teams = teams;
-    //    player.CurrentTeam = _context.Teams.Where(teams => teams.Id == player.TeamID).FirstOrDefault();
-
-    //    if (player == null)
-    //    {
-    //        return RedirectToAction("Error", "Home");
-    //    }
-
-    //    var playerVM = new ModifyPlayerViewModel
-    //    {
-    //        Nickname = player.Nickname,
-    //        Name = player.Name,
-    //        Age = player.Age,
-    //        TeamID = player.TeamID,
-    //        CurrentTeam = player.CurrentTeam,
-    //        Achievements = player.Achievements,
-    //        Rating = player.Rating,
-    //        Headshots = player.Headshots,
-    //        KD = player.KD,
-    //        MapsPlayed = player.MapsPlayed,
-    //        Url = player.Image
-
-
-    //    };
-    //    return View(playerVM);
-    //}
-
     [HttpPost]
-    public IActionResult ModifyPlayer(PlayerModel players)
+    public IActionResult ModifyPlayer(PlayerModel player)
     {
         if (!ModelState.IsValid)
         {
             List<SelectListItem> teams = _context.Teams
-                .Select(teams => new SelectListItem { Text = teams.Name, Value = teams.Id.ToString() }).ToList();
+                .Select(team => new SelectListItem { Text = team.Name, Value = team.Id.ToString() })
+                .ToList();
             ViewBag.Teams = teams;
-            return View(players);
+            return View(player);
         }
-        players.CurrentTeam = _context.Teams.Where(teams => teams.Id == players.TeamID).FirstOrDefault();
-        _context.Update(players);
+
+        var existingPlayer = _context.Players.FirstOrDefault(p => p.Id == player.Id);
+        if (existingPlayer == null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
+
+        // Update fields excluding the image
+        existingPlayer.Nickname = player.Nickname;
+        existingPlayer.Name = player.Name;
+        existingPlayer.Age = player.Age;
+        existingPlayer.TeamID = player.TeamID;
+        existingPlayer.Achievements = player.Achievements;
+        existingPlayer.Rating = player.Rating;
+        existingPlayer.Headshots = player.Headshots;
+        existingPlayer.KD = player.KD;
+        existingPlayer.MapsPlayed = player.MapsPlayed;
+        existingPlayer.CurrentTeam = _context.Teams.FirstOrDefault(t => t.Id == player.TeamID);
+
+        _context.Update(existingPlayer);
         _context.SaveChanges();
-        return View("Player", players);
+
+        return RedirectToAction("Player", new { playerId = player.Id });
     }
 
     [HttpGet]

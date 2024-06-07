@@ -112,7 +112,7 @@ public class TeamsController : Controller
     [HttpGet]
     public IActionResult ModifyTeam(int teamId)
     {
-        TeamModel? team = _context.Teams.Where(team => team.Id == teamId).FirstOrDefault();
+        TeamModel? team = _context.Teams.FirstOrDefault(t => t.Id == teamId);
 
         if (team == null)
         {
@@ -129,9 +129,21 @@ public class TeamsController : Controller
         {
             return View(team);
         }
-        _context.Update(team);
+
+        var existingTeam = _context.Teams.FirstOrDefault(t => t.Id == team.Id);
+        if (existingTeam == null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
+
+        // Update fields
+        existingTeam.Name = team.Name;
+        existingTeam.Region = team.Region;
+        existingTeam.Ranking = team.Ranking;
+
+        _context.Update(existingTeam);
         _context.SaveChanges();
-        return RedirectToAction("Team", new {teamId = team.Id});
+        return RedirectToAction("Team", new { teamId = team.Id });
     }
 
     [HttpGet]

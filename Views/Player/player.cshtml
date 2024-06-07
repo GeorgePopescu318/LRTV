@@ -56,6 +56,8 @@
     </div>
     <div class="details mt-4">
         <h1 style="margin-right:700px">@player.Nickname</h1>
+        @{
+            if (@player.CurrentTeam != null){
         <p class="mt-4" style="text-align:left;">   
             Current Team:
             <span style="float:right;"><a asp-controller="Teams" asp-action="Team" asp-route-teamId="@player.TeamID"
@@ -64,6 +66,11 @@
             <img class="card-img-top" src="@player.CurrentTeam.Image" alt="Card image cap" style="max-width: 30px; height: auto;">
             </span>
         </p>
+        }else{
+        <p>The player has no team.</p>
+        }
+        }
+        
         <hr style="margin: 0 0; border: none; height: 2px; background-color: #8499B1;">
         <p class="ach mt-4" style="text-align:left;">Achievements: <span style="float:right">@player.Achievements</span></p>
         <hr style="margin: 0 0; border: none; height: 10px; background-color: #8499B1;">

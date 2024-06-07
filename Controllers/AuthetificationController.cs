@@ -9,9 +9,9 @@ namespace LRTV.Controllers;
 
 public class AuthenticationController : Controller
 {
-    private readonly UsersContext context;
+    private readonly PlayersContext context;
 
-    public AuthenticationController(UsersContext context)
+    public AuthenticationController(PlayersContext context)
     {
         this.context = context;
     }
