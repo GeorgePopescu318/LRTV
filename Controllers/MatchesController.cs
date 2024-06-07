@@ -13,6 +13,7 @@ using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Query;
 using CloudinaryDotNet;
+using System.Security.Cryptography.Xml;
 
 
 namespace LRTV.Controllers;
@@ -56,11 +57,15 @@ public class MatchesController : Controller
         var team1Lineup = ViewLineup(match.Team1.Id);
         var team2Lineup = ViewLineup(match.Team2.Id);
 
+        var mapNames = _context.Maps.Select(map => map.Name).ToList();
+
+
         var viewModel = new MatchTeamLineupsViewModel
         {
             Match = match,
             LineupTeam1 = team1Lineup,
             LineupTeam2 = team2Lineup,
+            MapNames = mapNames
         };
 
         return View(viewModel);
@@ -71,6 +76,7 @@ public class MatchesController : Controller
         var players = _context.Players.Where(player => player.TeamID == teamID).ToList();
         return players;
     }
+    
 
     [HttpGet]
     public IActionResult AddMatch()
@@ -187,14 +193,14 @@ public class MatchesController : Controller
         if (matches.Team1.Id == matches.Team2.Id)
         {
             ModelState.AddModelError("", "Pick different Teams");
-            AddMatch();
+            //AddMatch();
             return View(matches);
         }
         else
         {
-            _context.Add(matches);
+            _context.Update(matches);
             _context.SaveChanges();
-            return View("Match", matches);
+            return RedirectToAction("Match", new { matchId = matches.Id });
         }
     }
 

@@ -1,10 +1,9 @@
-﻿@model List<NewsModel>
+@model List<NewsModel>
 
 @{
     var news = Model.OrderByDescending(news => news.Data).ToList();
     int? selectedCategoryId = ViewBag.SelectedCategoryId;
     DateTime? previousDate = null;
-
     ViewData["Title"] = "news";
     string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 }
@@ -24,12 +23,13 @@
         <input type="radio" class="btn-check" name="categoryId" value="3" id="Matches" autocomplete="off" @(selectedCategoryId == 3 ? "checked" : "") />
         <label class="btn btn-outline-primary" for="Matches">Matches</label>
 
-        <input type="radio" class="btn-check" name="categoryId" value="4" id="GameRelated" autocomplete="off" @(selectedCategoryId == 3 ? "checked" : "") />
+        <input type="radio" class="btn-check" name="categoryId" value="4" id="GameRelated" autocomplete="off" @(selectedCategoryId == 4 ? "checked" : "") />
         <label class="btn btn-outline-primary" for="GameRelated">Game Updates</label>
 
         <input type="radio" class="btn-check" name="categoryId" value="" id="all" autocomplete="off" @(selectedCategoryId == null ? "checked" : "") />
         <label class="btn btn-outline-primary" for="all">All</label>
     </div>
+    <br />
     <button type="submit" class="btn btn-primary mt-2">Filter</button>
 </form>
 
@@ -50,6 +50,7 @@
         <br />
     }
 </div>
+
 
 
 <h2>

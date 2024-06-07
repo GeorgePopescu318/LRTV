@@ -18,6 +18,6 @@ public class PlayersContext : DbContext
     public DbSet<MapsModel> Maps { get; set; }
 	public DbSet<NewsModel> News { get; set; }
 	public DbSet<CathegoryModel> Cathegories { get; set; }
-    public DbSet<UserModel> User { get; set; }
 
+    public DbSet<CommentsModel> Comments { get; set; }
 }

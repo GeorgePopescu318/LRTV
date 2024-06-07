@@ -16,5 +16,4 @@ public class NewsModel
 
     public string? Image {  get; set; }
 
-    public virtual ICollection<CommentsModel> Comments { get; set; }
 }

@@ -3,6 +3,8 @@
 @{
 	List<MatchesModel> matches = Model.OrderByDescending(match => match.DateTime).ToList();
 	ViewData["Title"] = "Matches";
+	string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+
 }
 
 <h1>Latest Matches</h1>
@@ -32,4 +34,7 @@
 	}
 }
 </div>
-<h3 class="mt-5" style="text-align:right"><a asp-action="AddMatch" class="btn btn-link" style="text-decoration:none; color:inherit"> Add Match</a></h3>
+@if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin")
+{
+	<h3 class="mt-5" style="text-align:right"><a asp-action="AddMatch" class="btn btn-link" style="text-decoration:none; color:inherit"> Add Match</a></h3>
+}

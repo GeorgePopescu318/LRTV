@@ -1,9 +1,12 @@
-﻿@model NewsModel
+﻿@model LRTV.ViewModels.News_CommentsViewModel
 @using Markdig
 @using System.Web
+
 @{
-    NewsModel news = Model;
+    var news = Model.News;
+    var comments = Model.Comments;
     ViewData["Title"] = news.Title;
+    string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 }
 <style>
     p :{
@@ -31,8 +34,8 @@
 <p style="font-size:12px; float:right">@news.Data</p>
 <article>
 	<h2 style="margin-top:50px">@news.Lead</h2>
-    @if (@Model.Image != "noNamer.jpg"){
-        <img class="card-img-top" src="@Model.Image" alt="Card image cap" style="max-width: 1000px; height: auto; display:block; margin-left:auto; margin-right:auto; width:60%">
+    @if (@news.Image != "noNamer.jpg"){
+        <img class="card-img-top" src="@news.Image" alt="Card image cap" style="max-width: 1000px; height: auto; display:block; margin-left:auto; margin-right:auto; width:60%">
     }
     else{
         <img class="card-img-top" src="/images/noNamer.jpg" alt="Card image cap">
@@ -40,9 +43,9 @@
     <div class="mt-5">
     @try
     {
-        if (!string.IsNullOrEmpty(Model.Body))
+        if (!string.IsNullOrEmpty(news.Body))
         {   
-            <div id="main">@Html.Raw(Markdown.ToHtml(Model.Body))</div>
+            <div id="main">@Html.Raw(Markdown.ToHtml(news.Body))</div>
         }
     }
     catch (Exception ex)
@@ -53,9 +56,48 @@
 </article>
 
 
+<div style="margin-top:100px">
+<h3>Comments</h3>
+    @foreach (var comm in comments)
+    {
+        <div class="card border-primary mb-3" style="max-width: auto;">
+            <div class="card-header"><b style="text-align:left; font-size:20px">@comm.userName</b> <small style="float:right">@comm.postedDate.ToString("g")</small></div>
+            <div class="card-body">
+                <p class="card-text">@comm.text</p>
+            </div>
+        </div>
+    }
+
+<form asp-action="AddComment" method="post">
+    <input type="hidden" name="newsId" value="@news.Id" />
+    <div class="form-group">
+        <label for="commentText">Comment</label>
+        <input type="text" class="form-control" name="commentText" id="commentText" />
+    </div>
+    <button type="submit" class="btn btn-primary" style="float:right; margin-top:10px">Submit</button>
+</form>
+</div>
+
+
+
+<script type="text/javascript">
+    function confirmDelete(event, url) {
+        event.preventDefault(); // Prevent the default link behavior
+        var confirmation = confirm("Are you sure you want to delete this?");
+        if (confirmation) {
+            window.location.href = url; // Redirect to the delete action if confirmed
+        }
+    }
+</script>
+
+
 <h3 style="margin-top:150px; text-align:right">
-    <a asp-controller="News" asp-action="ModifyNews" asp-route-NewsId="@Model.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Modify News</a>
-    <a asp-controller="News" asp-action="DeleteNews" asp-route-NewsId="@Model.Id" class="btn btn-link" style="text-decoration:none; color:inherit">DeleteNews</a>
+    @if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin"){
+    
+    <a asp-controller="News" asp-action="ModifyNews" asp-route-NewsId="@news.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Modify News</a>
+    <a href="javascript:void(0);" onclick="confirmDelete(event, '@Url.Action("DeleteNews", "News", new { newsId = news.Id })')" class="btn btn-link" style="text-decoration: none; color: inherit">Delete News</a>
+
+    }
 </h3>
 
 
