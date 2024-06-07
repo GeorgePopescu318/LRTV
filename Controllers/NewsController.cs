@@ -4,22 +4,29 @@ using LRTV.Models;
 using LRTV.Services;
 using LRTV.ViewModels;
 using Markdig;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
+using System.Security.Claims;
 
 namespace LRTV.Controllers;
 
 public class NewsController : Controller
 {
     private readonly PlayersContext _context;
+    private readonly UsersContext _userContext;
     private readonly IPhotoService _photoService;
+    //private readonly UserManager<UserModel> _userManager;
     public List<NewsModel>? ListNews { get; set; }
     public NewsModel? CurrentNews { get; set; }
-    public  NewsController(PlayersContext context, IPhotoService photoService)
+    public  NewsController(PlayersContext context, IPhotoService photoService, UsersContext userContext)
     {
 		_context = context;
         _photoService = photoService;
+        _userContext = userContext;
     }
     [HttpGet]
     public IActionResult Index()
@@ -35,12 +42,69 @@ public class NewsController : Controller
     [HttpGet]
     public IActionResult News(int NewsId)
     {
-		CurrentNews = _context.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
-        if (CurrentNews == null)
+        var news = _context.News.Include(news => news.Cathegory).FirstOrDefault(news => news.Id == NewsId);
+        if (news == null)
         {
             return RedirectToAction("Error", "Home");
         }
-        return View(CurrentNews);
+
+        var comments = _context.Comments.Where(comm => comm.newsId == NewsId).ToList();
+
+        var viewModel = new News_CommentsViewModel
+        {   
+            News = news,
+            Comments = comments
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> AddComment(int newsId, string commentText)
+    {
+        if (string.IsNullOrEmpty(commentText))
+        {
+            return RedirectToAction("News", new { newsId = newsId });
+        }
+
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userIdString))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        if (!int.TryParse(userIdString, out int userId))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = await _userContext.User.FindAsync(userId);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var news = await _context.News.FindAsync(newsId);
+        if (news == null)
+        {
+            return NotFound();
+        }
+
+        var comment = new CommentsModel
+        {
+            userId = user.Id,
+            userName = user.Username,
+            text = commentText,
+            postedDate = DateTime.Now,
+            newsId = newsId,
+        };
+
+        _context.Comments.Add(comment);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("News", new { newsId = newsId });
     }
 
     [HttpGet]
@@ -75,24 +139,6 @@ public class NewsController : Controller
         return RedirectToAction("SortCat", new { categoryId });
     }
 
-
-    //   [HttpPost]
-    //   public IActionResult AddNews(NewsModel newNews) { 
-
-    //       if (!ModelState.IsValid)
-    //       {
-    //		List<SelectListItem> cathegories = _newsContext.Cathegories
-    //		.Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
-
-    //		ViewBag.Cathegories = cathegories;
-    //		return View(newNews);
-    //       }
-
-    //       newNews.Cathegory = _newsContext.Cathegories.Where(cathegories => cathegories.Id== newNews.CathegoryID).FirstOrDefault();
-    //       _newsContext.Add(newNews);
-    //       _newsContext.SaveChanges();
-    //       return RedirectToAction("Index");
-    //}
 
     public async Task<IActionResult> AddNews(CreateNewsViewModel newNews)
     {
@@ -162,7 +208,7 @@ public class NewsController : Controller
 		news.Cathegory = _context.Cathegories.Where(cathegories => cathegories.Id == news.CathegoryID).FirstOrDefault();
         _context.Update(news);
         _context.SaveChanges();
-        return View("News",news);
+        return RedirectToAction("News", new { newsId = news.Id });
 	}
 
     [HttpGet]

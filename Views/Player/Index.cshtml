@@ -6,6 +6,7 @@
     string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 }
 
+<h1>Pagina Jucator</h1>
 
 @{
     foreach(PlayerModel player in players)
@@ -13,18 +14,13 @@
         <hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
         <h2><a asp-controller="Player" asp-action="Player" asp-route-playerId="@player.Id" style="text-decoration: none; color:inherit">@player.Nickname</a> </h2>
 
-        @if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin")
-        {
-            <h2><a asp-controller="Player" asp-action="ModifyPlayer" asp-route-playerId="@player.Id">Modify a player</a> </h2>
-            <h2><a asp-controller="Player" asp-action="DeletePlayer" asp-route-playerId="@player.Id">Delete a player</a> </h2>
-        }
         
         <br/>
     }
     <hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
 }
-<h1>Pagina Jucator</h1>
+
 @if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin")
 {
-    <h3><a asp-action="AddPlayer" class="btn btn-link" style="text-decoration:none; color:inherit">Add a new player</a></h3>
+    <h3><a asp-action="AddPlayer" class="btn btn-link" style="text-decoration:none; color:inherit; float:right">Add a new player</a></h3>
 }

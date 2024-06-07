@@ -1,8 +1,88 @@
-﻿@{
+﻿@model LRTV.ViewModels.HomePageViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="row">
+        @if(Model.Player != null)
+        {
+        <div class="col-md-3">
+            <h3>Top Rated Player</h3>
+            <div class="card mb-3">
+                <a asp-controller="Player" asp-action="Player" asp-route-playerId="@Model.Player.Id" style="text-decoration: none; color:inherit">
+                    <img class="card-img-top d-block mx-auto" src="@Model.Player.Image" alt="Player image" style="max-width: 50%; height: auto;">
+                
+                <div class="card-body">
+                        <h5 class="card-title text-center">@Model.Player.Nickname</h5>
+                </a>
+                    <p class="card-text text-center">Rating: @Model.Player.Rating</p>
+                </div>
+            </div>
+        }
+            <h3>Top Teams</h3>
+            <ul class="list-group">
+                @foreach (var team in Model.Teams)
+                {
+                    <li class="list-group-item">
+                        @team.Ranking.
+                        <img class="card-img-top" src="@team.Image" alt="Team image" style="max-width: 24px; height: auto;">
+                        <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@team.Id" style="text-decoration:none; color:inherit"> @team.Name</a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="col-md-6">
+            <div class="text-center">
+            <h1 class="site-title">LRTV</h1>
+            </div>
+            <div>
+                <h3>News</h3>
+                @foreach (var news in Model.News)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title" style="text-align:center">
+                                <a asp-controller="News" asp-action="News" asp-route-NewsId="@news.Id" style="text-decoration:none; color:inherit">@news.Title</a>
+                            </h5>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <h3>Latest Matches</h3>
+            <ul class="list-group">
+                @foreach (var match in Model.Matches)
+                {
+                    <li class="list-group-item">
+                        <a asp-controller="Matches" asp-action="Match" asp-route-MatchId="@match.Id" style="text-decoration:none; color:inherit">
+                            <img class="card-img-top" src="@match.Team1.Image" alt="Team 1 image" style="max-width: 36px; height: auto;"><strong>@match.Team1.Name</strong><br />
+                            <img class="card-img-top" src="@match.Team2.Image" alt="Team 2 image" style="max-width: 36px; height: auto;"><strong>@match.Team2.Name</strong><br />
+                            <p style="text-align:center">@match.DateTime.Date.ToShortDateString()</p>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
 </div>
+
+<style>
+    .container {
+        margin-top: 20px;
+    }
+
+    .card {
+        margin-bottom: 15px;
+    }
+
+    .site-title {
+        margin-bottom: 20px;
+        font-size: 48px;
+        color: #0077cc;
+    }
+</style>

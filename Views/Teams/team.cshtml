@@ -4,6 +4,8 @@
     var team = Model.Team;
     var players = Model.Players;
     ViewData["Title"] = team.Name;
+    string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+
 }
 
 <style>
@@ -31,6 +33,17 @@
     </div>
 
 
+    <script type="text/javascript">
+        function confirmDelete(event, url) {
+            event.preventDefault(); // Prevent the default link behavior
+            var confirmation = confirm("Are you sure you want to delete this?");
+            if (confirmation) {
+                window.location.href = url; // Redirect to the delete action if confirmed
+            }
+        }
+    </script>
+
+
     <hr style="margin: 0 0;border: none; height: 10px; background-color: #8499B1;">
     <div class="row">
         <div class="col-md-12">
@@ -52,10 +65,13 @@
             <p>Region: @team.Region</p>
             <hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
             <br />
-            <h3 style="margin-top:150px; text-align:right; text-decoration:none; color:inherit">
-                <a asp-controller="Teams" asp-action="ModifyTeam" asp-route-teamId="@team.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Edit Team @team.Name</a>
-                <a asp-controller="Teams" asp-action="DeleteTeam" asp-route-teamId="@team.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Delete Team @team.Name</a>
-            </h3>
+            @if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin")
+            {
+                <h3 style="margin-top:150px; text-align:right; text-decoration:none; color:inherit">
+                    <a asp-controller="Teams" asp-action="ModifyTeam" asp-route-teamId="@team.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Edit Team @team.Name</a>
+                    <a href="javascript:void(0);" onclick="confirmDelete(event, '@Url.Action("DeleteTeam", "Teams", new { teamId = team.Id })')" class="btn btn-link" style="text-decoration: none; color: inherit">Delete Team</a>
+                </h3>
+            }
             <p style="margin-top:100px; text-align:center"><a asp-action="Index">Back to home page</a></p>
 
 

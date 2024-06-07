@@ -77,32 +77,36 @@ public class AuthenticationController : Controller
                 else if (string.IsNullOrWhiteSpace(model.Password))
                     ModelState.AddModelError(string.Empty, "The password is empty!");
 
-                UserModel? user = context.User.Where(user => user.Username!.ToLower() == model.Username!.ToLower() && user.Password == model.Password).FirstOrDefault();
+                UserModel? user = context.User
+                    .Where(user => user.Username!.ToLower() == model.Username!.ToLower() && user.Password == model.Password)
+                    .FirstOrDefault();
 
-                if( user != null)
+                if (user != null)
                 {
                     List<Claim> claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Username !),
-                        new Claim("Role", user.Role.ToString())
-                    };
+                {
+                    new Claim(ClaimTypes.Name, user.Username!),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Add user ID as a claim
+                    new Claim("Role", user.Role.ToString())
+                };
                     var claimIdentity = new ClaimsIdentity(claims, "AuthenticationCookie");
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
                     return RedirectToAction("Index", "Home");
                 }
-
                 else
+                {
                     ModelState.AddModelError(string.Empty, "Invalid username or password!");
+                }
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, "Error logging in: " + ex.Message);
             }
-
         }
         return View(model);
     }
+
 
     [HttpGet]
     public IActionResult Login()

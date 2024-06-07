@@ -3,6 +3,8 @@
 @{
     List<TeamModel> sortedTeams = Model.OrderBy(team => team.Ranking).ToList();
     ViewData["Title"] = "Teams Ranking";
+    string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+
 }
 
 <h1>Teams Ranking</h1>
@@ -21,5 +23,7 @@
     </div>
     <br />
 }
-
-<h3><a asp-action="AddTeam" class="btn btn-link" style="text-decoration:none; color:inherit">Add a new team</a></h3>
+@if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin")
+{
+    <h3><a asp-action="AddTeam" class="btn btn-link" style="text-decoration:none; color:inherit; float:right">Add a new team</a></h3>
+}
