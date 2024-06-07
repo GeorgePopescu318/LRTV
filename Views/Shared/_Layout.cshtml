@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+}
+
+<!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="utf-8" />
@@ -9,7 +13,7 @@
     <link rel="stylesheet" href="~/css/mycsstheme.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LRTV.styles.css" asp-append-version="true" />
- @*    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.1/css/flag-icons.min.css"/>--> *@
+    @*    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.1/css/flag-icons.min.css"/>--> *@
 
 </head>
 
@@ -33,19 +37,25 @@
                             <a class="nav-link" asp-area="" asp-controller="News" asp-action="Index">News</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Matches" asp-action="Index">Matches</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area ="" asp-controller="Player" asp-action="Index">Players</a>
+                            <a class="nav-link" asp-area="" asp-controller="Player" asp-action="Index">Players</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Teams" asp-action="Index">Teams</a>
                         </li>
                     </ul>
-                    <ul class="navbar-nav flex-grow-1" color="#212529">
+                    <ul class="navbar-nav ms-auto">
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item"  >
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="MyProfile">My Profile</a>
+                            </li>
+                            @if (userRole.ToLower() == "admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                </li>
+                            }
+                            <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Authentication" asp-action="Logout">Logout</a>
                             </li>
                         }

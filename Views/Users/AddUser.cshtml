@@ -1,0 +1,32 @@
+﻿@using LRTV.ViewModels
+@model CreateUserViewModel
+@{
+    ViewData["Title"] = "Add new User";
+    
+}
+<div class="container">
+    <form method="post" asp-action="AddUser" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="@Model.Username" class="control-label">Username</label>
+            <input asp-for="@Model.Username" class="form-control" />
+            <span asp-validation-for="@Model.Username" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Password" class="control-label">Password</label>
+            <input asp-for="@Model.Password" class="form-control" />
+            <span asp-validation-for="@Model.Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.PasswordConfirm" class="control-label">Password Confirmation</label>
+            <input asp-for="@Model.PasswordConfirm" class="form-control" />
+            <span asp-validation-for="@Model.PasswordConfirm" class="text-danger"></span>
+        </div>
+        
+
+            <br />
+            <input type="submit" value="Add" class="btn btn-primary inline-elements" />
+            <br />
+    </form>
+</div>
+

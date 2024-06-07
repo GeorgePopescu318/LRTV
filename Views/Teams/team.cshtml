@@ -5,7 +5,6 @@
     var players = Model.Players;
     ViewData["Title"] = team.Name;
     string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
-
 }
 
 <style>

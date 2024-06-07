@@ -4,7 +4,6 @@
     List<TeamModel> sortedTeams = Model.OrderBy(team => team.Ranking).ToList();
     ViewData["Title"] = "Teams Ranking";
     string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
-
 }
 
 <h1>Teams Ranking</h1>

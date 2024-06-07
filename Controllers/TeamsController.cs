@@ -79,6 +79,16 @@ public class TeamsController : Controller
     [HttpGet]
     public IActionResult AddTeam()
     {
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
         return View();
     }
 
@@ -112,7 +122,17 @@ public class TeamsController : Controller
     [HttpGet]
     public IActionResult ModifyTeam(int teamId)
     {
-        TeamModel? team = _context.Teams.FirstOrDefault(t => t.Id == teamId);
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
+        TeamModel? team = _context.Teams.Where(team => team.Id == teamId).FirstOrDefault();
 
         if (team == null)
         {
@@ -149,6 +169,16 @@ public class TeamsController : Controller
     [HttpGet]
     public IActionResult DeleteTeam(int teamId)
     {
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
         TeamModel? team = _context.Teams.Where(team => team.Id == teamId).FirstOrDefault();
         if (team == null)
         {

@@ -1,0 +1,40 @@
+﻿@model UserModel
+
+@{
+    UserModel user = Model;
+    ViewData["Title"] = user.Username;
+}
+<style>
+    p : {
+        border = none;
+        margin = 0 0;
+        padding = 0px;
+    }
+
+    h1, h2 : {
+        margin = 0 0;
+        border = none;
+    }
+
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+</style>
+<h1 class="mt-5" style="text-align:center; font-size:64px; font-weight: bold">@user.Role</h1>
+<p>
+    <span style="font-size:34px; text-align:left">@user.Username</span>
+    
+</p>
+
+
+<h3 style="margin-top:150px; text-align:right">
+    <!--<a asp-controller="Users" asp-action="ModifyUser" asp-route-UserId="@Model.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Edit User</a>-->
+    <a asp-controller="Users" asp-action="PromoteUser" asp-route-UserId="@Model.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Promote User</a>
+    <a asp-controller="Users" asp-action="DemoteUser" asp-route-UserId="@Model.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Demote User</a>
+    <a asp-controller="Users" asp-action="DeleteUser" asp-route-UserId="@Model.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Delete User</a>
+</h3>
+
+<p style="margin-top:100px; text-align:center"><a asp-action="Index">Back to home page</a></p>

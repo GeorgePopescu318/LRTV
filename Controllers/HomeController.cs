@@ -35,6 +35,11 @@ namespace LRTV.Controllers
             return View(viewModel);
         }
 
+        public IActionResult AccessForbidden()
+        {
+            return View("AccessForbidden");
+        }
+
 
         public IActionResult Privacy()
         {

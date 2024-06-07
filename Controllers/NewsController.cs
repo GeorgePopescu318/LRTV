@@ -112,6 +112,14 @@ public class NewsController : Controller
     [HttpGet]
     public IActionResult AddNews()
     {
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        
+            if (userRole.ToLower() != "admin" && userRole.ToLower() != "moderator")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        
+       
         List<SelectListItem> cathegories = _context.Cathegories
             .Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
 
@@ -183,7 +191,18 @@ public class NewsController : Controller
     [HttpGet]
     public IActionResult ModifyNews(int NewsId)
     {
-		List<SelectListItem> cathegories = _context.Cathegories
+
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
+        List<SelectListItem> cathegories = _context.Cathegories
 			.Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
 
 		ViewBag.Cathegories = cathegories;
@@ -232,7 +251,17 @@ public class NewsController : Controller
     [HttpGet]
     public IActionResult DeleteNews(int NewsId)
     {
-		NewsModel? news = _context.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
+        NewsModel? news = _context.News.Where(news => news.Id == NewsId).Include(news => news.Cathegory).FirstOrDefault();
 		if (news == null)
         {
 			return RedirectToAction("Error", "Home");
