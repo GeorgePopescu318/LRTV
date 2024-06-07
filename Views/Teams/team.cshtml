@@ -4,6 +4,7 @@
     var team = Model.Team;
     var players = Model.Players;
     ViewData["Title"] = team.Name;
+    string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 }
 
 <style>
@@ -53,8 +54,9 @@
             <hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
             <br />
             <h3 style="margin-top:150px; text-align:right; text-decoration:none; color:inherit">
-                <a asp-controller="Teams" asp-action="ModifyTeam" asp-route-teamId="@team.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Edit Team @team.Name</a>
-                <a asp-controller="Teams" asp-action="DeleteTeam" asp-route-teamId="@team.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Delete Team @team.Name</a>
+                @if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin")
+               { <a asp-controller="Teams" asp-action="ModifyTeam" asp-route-teamId="@team.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Edit Team @team.Name</a>
+                <a asp-controller="Teams" asp-action="DeleteTeam" asp-route-teamId="@team.Id" class="btn btn-link" style="text-decoration:none; color:inherit">Delete Team @team.Name</a>}
             </h3>
             <p style="margin-top:100px; text-align:center"><a asp-action="Index">Back to home page</a></p>
 

@@ -5,8 +5,7 @@
     int? selectedCategoryId = ViewBag.SelectedCategoryId;
     DateTime? previousDate = null;
 
-    ViewData["Title"] = "news";
-    List<NewsModel> news = Model;
+    
     ViewData["Title"] = "news";
     string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 }

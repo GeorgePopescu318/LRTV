@@ -4,6 +4,7 @@
     PlayerModel player = Model;
     ViewData["Title"] = player.Nickname;
     var CurrentTeamName = "";
+    string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 }
 
 <style>
@@ -95,8 +96,9 @@
 
 <h3 style="margin-top:70px">
     <span style="float:right">
-    <a asp-controller="Player" asp-action="ModifyPlayer" asp-route-playerId="@player.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Edit player @player.Nickname</a>
-    <a asp-controller="Player" asp-action="DeletePlayer" asp-route-playerId="@player.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Delete player @player.Nickname</a>
+        @if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin")
+    {<a asp-controller="Player" asp-action="ModifyPlayer" asp-route-playerId="@player.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Edit player @player.Nickname</a>
+    <a asp-controller="Player" asp-action="DeletePlayer" asp-route-playerId="@player.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Delete player @player.Nickname</a>}
     </span>
 </h3>
 <br />

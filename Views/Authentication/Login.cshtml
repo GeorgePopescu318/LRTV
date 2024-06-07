@@ -1,4 +1,5 @@
 ﻿@model LRTV.Models.UserModel
+<script src="https://kit.fontawesome.com/687b81a34f.js" crossorigin="anonymous"></script>
 
 <div class="container">
     <h1 class="text-center">Login</h1>
@@ -13,7 +14,14 @@
 
                 <div class="form-group">
                     <label asp-for="Password" class="control-label">Password</label>
-                    <input asp-for="Password" class="form-control bg-light" />
+                    <div class="input-group">
+                        <input asp-for="Password" id="passwordLogin" type="password" class="form-control bg-light" />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="togglePasswordLogin">
+                                <i id="toggleIconLogin" class="fa fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
@@ -37,3 +45,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const togglePasswordLogin = document.querySelector('#togglePasswordLogin');
+        const passwordLogin = document.querySelector('#passwordLogin');
+        const toggleIconLogin = document.querySelector('#toggleIconLogin');
+
+        togglePasswordLogin.addEventListener('click', function (e) {
+            const type = passwordLogin.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordLogin.setAttribute('type', type);
+
+            if (type === 'password') {
+                toggleIconLogin.classList.add('fa-eye-slash');
+                toggleIconLogin.classList.remove('fa-eye');
+            } else {
+                toggleIconLogin.classList.remove('fa-eye-slash');
+                toggleIconLogin.classList.add('fa-eye');
+            }
+        });
+    });
+</script>

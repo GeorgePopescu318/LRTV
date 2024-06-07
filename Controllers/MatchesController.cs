@@ -75,7 +75,16 @@ public class MatchesController : Controller
     [HttpGet]
     public IActionResult AddMatch()
     {
-
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
         List<SelectListItem> team1 = _context.Teams
             .Select(team1 => new SelectListItem { Text = team1.Name, Value = team1.Id.ToString() }).ToList();
 
@@ -138,6 +147,16 @@ public class MatchesController : Controller
     public IActionResult ModifyMatch(int matchId)
     {
 
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
         List<SelectListItem> team1 = _context.Teams
             .Select(team1 => new SelectListItem { Text = team1.Name, Value = team1.Id.ToString() }).ToList();
         ViewBag.Teams1 = team1;
@@ -200,7 +219,19 @@ public class MatchesController : Controller
 
     [HttpGet]
     public IActionResult DeleteMatch(int matchId)
+
     {
+
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
         MatchesModel? matches = _context.Matches.Where(players => players.Id == matchId).Include(matches => matches.Team1).Include(matches => matches.Team2).Include(matches => matches.Map).FirstOrDefault();
         if (matches == null)
         {

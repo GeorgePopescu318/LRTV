@@ -7,6 +7,7 @@
     var lineupT1 = Model.LineupTeam1;
     var lineupT2 = Model.LineupTeam2;
     ViewData["Title"] = match.Team1.Name + " vs. " + match.Team2.Name;
+    string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 
 
     string colorTeam1 = match.ScoreTeam1 > match.ScoreTeam2 ? "green" : "red";
@@ -119,8 +120,9 @@
 
 
 <h3 style="margin-top:150px; text-align:right">
-    <a asp-controller="Matches" asp-action="ModifyMatch" asp-route-MatchId="@match.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Modify Match</a>
-    <a asp-controller="Matches" asp-action="DeleteMatch" asp-route-MatchId="@match.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Delete Match</a>
+    @if (userRole.ToLower() == "moderator" || userRole.ToLower() == "admin")
+    {<a asp-controller="Matches" asp-action="ModifyMatch" asp-route-MatchId="@match.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Modify Match</a>
+    <a asp-controller="Matches" asp-action="DeleteMatch" asp-route-MatchId="@match.Id" class="btn btn-link" style="text-decoration: none; color:inherit">Delete Match</a>}
 </h3>
 
 <p style="margin-top:100px; text-align:center"><a asp-action="Index">Back to home page</a></p>

@@ -55,6 +55,16 @@ public class PlayerController : Controller
     [HttpGet]
     public IActionResult AddPlayer()
     {
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
 
         List<SelectListItem> teams = _context.Teams
             .Select(teams => new SelectListItem { Text = teams.Name, Value = teams.Id.ToString() }).ToList();
@@ -179,6 +189,16 @@ public class PlayerController : Controller
 
     public async Task<IActionResult> ModifyPlayer(int playerId)
     {
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
         PlayerModel? player = _context.Players.Where(players => players.Id == playerId).Include(players => players.CurrentTeam).FirstOrDefault();
         List<SelectListItem> teams = _context.Teams
             .Select(teams => new SelectListItem { Text = teams.Name, Value = teams.Id.ToString() }).ToList();
@@ -228,6 +248,16 @@ public class PlayerController : Controller
     [HttpGet]
     public IActionResult DeletePlayer(int playerId)
     {
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
         PlayerModel? players = _context.Players.Where(players => players.Id == playerId).Include(players => players.CurrentTeam).FirstOrDefault();
         if (players == null)
         {

@@ -1,4 +1,5 @@
 ﻿@model LRTV.Models.UserModel
+<script src="https://kit.fontawesome.com/687b81a34f.js" crossorigin="anonymous"></script>
 
 <div class="container">
     <h1 class="text-center">Register</h1>
@@ -13,13 +14,27 @@
 
                 <div class="form-group">
                     <label asp-for="Password" class="control-label">Password</label>
-                    <input asp-for="Password" class="form-control bg-light" />
+                    <div class="input-group">
+                        <input asp-for="Password" id="password" type="password" class="form-control bg-light" />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i id="toggleIcon" class="fa fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="PasswordConfirm" class="control-label">Password Confirm</label>
-                    <input asp-for="PasswordConfirm" class="form-control bg-light" />
+                    <div class="input-group">
+                        <input asp-for="PasswordConfirm" id="passwordConfirm" type="password" class="form-control bg-light" />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirm">
+                                <i id="toggleIconConfirm" class="fa fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
                     <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
                 </div>
 
@@ -43,3 +58,41 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        const toggleIcon = document.querySelector('#toggleIcon');
+
+        togglePassword.addEventListener('click', function (e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            if (type === 'password') {
+                toggleIcon.classList.add('fa-eye-slash');
+                toggleIcon.classList.remove('fa-eye');
+            } else {
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        });
+
+        const togglePasswordConfirm = document.querySelector('#togglePasswordConfirm');
+        const passwordConfirm = document.querySelector('#passwordConfirm');
+        const toggleIconConfirm = document.querySelector('#toggleIconConfirm');
+
+        togglePasswordConfirm.addEventListener('click', function (e) {
+            const type = passwordConfirm.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordConfirm.setAttribute('type', type);
+
+            if (type === 'password') {
+                toggleIconConfirm.classList.add('fa-eye-slash');
+                toggleIconConfirm.classList.remove('fa-eye');
+            } else {
+                toggleIconConfirm.classList.remove('fa-eye-slash');
+                toggleIconConfirm.classList.add('fa-eye');
+            }
+        });
+    });
+</script>

@@ -23,6 +23,7 @@ public class AuthenticationController : Controller
     [HttpPost]
     public IActionResult Register(UserModel model)
     {
+        
         if (ModelState.IsValid)
         {
             try
@@ -62,6 +63,10 @@ public class AuthenticationController : Controller
     [HttpGet]
     public IActionResult Register()
     {
+        if (User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("AccessForbidden", "Home");
+        }
         return View();
     }
 
@@ -107,6 +112,10 @@ public class AuthenticationController : Controller
     [HttpGet]
     public IActionResult Login()
     {
+        if (User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("AccessForbidden", "Home");
+        }
         return View();
     }
 

@@ -1,0 +1,31 @@
+﻿@model List<UserModel>
+
+@{
+    
+    var loggedInUsername = User.Identity.Name;
+    var filteredUsers = Model.Where(u => u.Username != loggedInUsername).ToList();
+    ViewData["Title"] = "user";
+    string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+}
+
+
+<h1>Users List</h1>
+
+
+<div>
+    @foreach (UserModel user in filteredUsers)
+    {
+        <h2 style="margin-left:20px">
+            <a asp-controller="Users" asp-action="UserProfile" asp-route-UserId="@user.Id" style="text-decoration:none; color:inherit">@user.Username</a>
+        </h2>
+        <hr style="margin: 0 0;border: none; height: 2px; background-color: #8499B1;">
+        <br />
+    }
+</div>
+
+
+<h2>
+   
+        <h3 class="mt-5" style="text-align:right"> <a asp-action="AddUser" class="btn btn-link" style="text-decoration:none; color:inherit"> Add User</a></h3>
+    
+    </h2>

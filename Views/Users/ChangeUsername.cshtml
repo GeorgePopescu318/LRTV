@@ -1,0 +1,22 @@
+﻿@model LRTV.ViewModels.ChangeUsernameViewModel
+@{
+    ViewData["Title"] = "Change Username";
+}
+
+<h2>Change Username</h2>
+
+<form asp-action="ChangeUsername" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="NewUsername" class="control-label">New Username</label>
+        <input asp-for="NewUsername" class="form-control bg-light" />
+        <span asp-validation-for="NewUsername" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Change Username</button>
+</form>
+
+<p>
+    <a asp-action="MyProfile">Back to Profile</a>
+</p>
