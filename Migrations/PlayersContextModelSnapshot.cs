@@ -4,7 +4,6 @@ using LRTV.ContextModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LRTV.Migrations
 {
     [DbContext(typeof(PlayersContext))]
-    [Migration("20240606183410_Bezel32")]
-    partial class Bezel32
+    partial class PlayersContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,6 +56,9 @@ namespace LRTV.Migrations
                     b.Property<string>("text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
 
                     b.Property<string>("userName")
                         .IsRequired()
@@ -271,7 +271,7 @@ namespace LRTV.Migrations
             modelBuilder.Entity("LRTV.Models.CommentsModel", b =>
                 {
                     b.HasOne("LRTV.Models.NewsModel", "News")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("newsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -318,11 +318,6 @@ namespace LRTV.Migrations
                         .HasForeignKey("CurrentTeamId");
 
                     b.Navigation("CurrentTeam");
-                });
-
-            modelBuilder.Entity("LRTV.Models.NewsModel", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

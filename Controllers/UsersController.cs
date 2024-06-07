@@ -14,9 +14,9 @@ namespace LRTV.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly UsersContext context;
+        private readonly PlayersContext context;
 
-        public UsersController(UsersContext context)
+        public UsersController(PlayersContext context)
         {
             this.context = context;
         }

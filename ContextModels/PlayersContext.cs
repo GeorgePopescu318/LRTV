@@ -20,4 +20,6 @@ public class PlayersContext : DbContext
 	public DbSet<CathegoryModel> Cathegories { get; set; }
 
     public DbSet<CommentsModel> Comments { get; set; }
+
+    public DbSet<UserModel> User { get; set; }
 }

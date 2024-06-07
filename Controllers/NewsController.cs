@@ -18,16 +18,13 @@ namespace LRTV.Controllers;
 public class NewsController : Controller
 {
     private readonly PlayersContext _context;
-    private readonly UsersContext _userContext;
     private readonly IPhotoService _photoService;
-    //private readonly UserManager<UserModel> _userManager;
     public List<NewsModel>? ListNews { get; set; }
     public NewsModel? CurrentNews { get; set; }
-    public  NewsController(PlayersContext context, IPhotoService photoService, UsersContext userContext)
+    public NewsController(PlayersContext context, IPhotoService photoService)
     {
-		_context = context;
+        _context = context;
         _photoService = photoService;
-        _userContext = userContext;
     }
     [HttpGet]
     public IActionResult Index()
@@ -44,6 +41,7 @@ public class NewsController : Controller
     [HttpGet]
     public IActionResult News(int NewsId)
     {
+
         var news = _context.News.Include(news => news.Cathegory).FirstOrDefault(news => news.Id == NewsId);
         if (news == null)
         {
@@ -82,7 +80,7 @@ public class NewsController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userContext.User.FindAsync(userId);
+        var user = await _context.User.FindAsync(userId);
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
@@ -112,14 +110,18 @@ public class NewsController : Controller
     [HttpGet]
     public IActionResult AddNews()
     {
+
         var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
-        
-            if (userRole.ToLower() != "admin" && userRole.ToLower() != "moderator")
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
             {
                 return RedirectToAction("AccessForbidden", "Home");
             }
-        
-       
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
+
         List<SelectListItem> cathegories = _context.Cathegories
             .Select(cathegories => new SelectListItem { Text = cathegories.Name, Value = cathegories.Id.ToString() }).ToList();
 

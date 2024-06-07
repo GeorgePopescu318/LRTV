@@ -32,7 +32,7 @@ public class MatchesController : Controller
     public IActionResult Index()
     {
 
-        ListMatches = _context.Matches.Include(match => match.Team1).Include(match => match.Team2).Include(match =>  match.Map).ToList();
+        ListMatches = _context.Matches.Include(match => match.Team1).Include(match => match.Team2).Include(match => match.Map).ToList();
         if (ListMatches == null)
         {
             return RedirectToAction("Error", "Home");
@@ -76,7 +76,7 @@ public class MatchesController : Controller
         var players = _context.Players.Where(player => player.TeamID == teamID).ToList();
         return players;
     }
-    
+
 
     [HttpGet]
     public IActionResult AddMatch()
@@ -91,6 +91,7 @@ public class MatchesController : Controller
         }
         else
             return RedirectToAction("AccessForbidden", "Home");
+
         List<SelectListItem> team1 = _context.Teams
             .Select(team1 => new SelectListItem { Text = team1.Name, Value = team1.Id.ToString() }).ToList();
 
@@ -122,7 +123,7 @@ public class MatchesController : Controller
             List<SelectListItem> team2 = _context.Teams
             .Select(team2 => new SelectListItem { Text = team2.Name, Value = team2.Id.ToString() }).ToList();
 
-            ViewBag.Teams1 = team2;
+            ViewBag.Teams2 = team2;
 
             List<SelectListItem> map = _context.Teams
             .Select(map => new SelectListItem { Text = map.Name, Value = map.Id.ToString() }).ToList();
@@ -146,13 +147,12 @@ public class MatchesController : Controller
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-        
+
     }
 
     [HttpGet]
     public IActionResult ModifyMatch(int matchId)
     {
-
         var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
         if (User.Identity.IsAuthenticated)
         {
@@ -198,7 +198,7 @@ public class MatchesController : Controller
             List<SelectListItem> team2 = _context.Teams
             .Select(team2 => new SelectListItem { Text = team2.Name, Value = team2.Id.ToString() }).ToList();
 
-            ViewBag.Teams1 = team2;
+            ViewBag.Teams2 = team2;
 
             List<SelectListItem> map = _context.Maps
             .Select(map => new SelectListItem { Text = map.Name, Value = map.Id.ToString() }).ToList();
@@ -225,9 +225,7 @@ public class MatchesController : Controller
 
     [HttpGet]
     public IActionResult DeleteMatch(int matchId)
-
     {
-
         var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
         if (User.Identity.IsAuthenticated)
         {

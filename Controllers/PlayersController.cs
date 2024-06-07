@@ -116,6 +116,16 @@ public class PlayerController : Controller
     [HttpGet]
     public IActionResult ModifyPlayer(int playerId)
     {
+        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+        if (User.Identity.IsAuthenticated)
+        {
+            if (userRole.ToLower() == "member")
+            {
+                return RedirectToAction("AccessForbidden", "Home");
+            }
+        }
+        else
+            return RedirectToAction("AccessForbidden", "Home");
         List<SelectListItem> teams = _context.Teams
             .Select(team => new SelectListItem { Text = team.Name, Value = team.Id.ToString() })
             .ToList();
@@ -138,17 +148,8 @@ public class PlayerController : Controller
     [HttpPost]
     public IActionResult ModifyPlayer(PlayerModel player)
     {
-        var userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
-        if (User.Identity.IsAuthenticated)
-        {
-            if (userRole.ToLower() == "member")
-            {
-                return RedirectToAction("AccessForbidden", "Home");
-            }
-        }
-        else
-            return RedirectToAction("AccessForbidden", "Home");
-        PlayerModel? player = _context.Players.Where(players => players.Id == playerId).Include(players => players.CurrentTeam).FirstOrDefault();
+        
+        //PlayerModel? player = _context.Players.Where(players => players.Id == playerId).Include(players => players.CurrentTeam).FirstOrDefault();
         List<SelectListItem> teams = _context.Teams
             .Select(teams => new SelectListItem { Text = teams.Name, Value = teams.Id.ToString() }).ToList();
         ViewBag.Teams = teams;

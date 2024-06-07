@@ -10,7 +10,6 @@
 
     string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
     ViewData["Title"] = match.Team1.Name + " vs. " + match.Team2.Name;
-    string userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 
 
     string colorTeam1 = match.ScoreTeam1 > match.ScoreTeam2 ? "green" : "red";

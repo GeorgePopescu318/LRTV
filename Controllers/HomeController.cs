@@ -3,6 +3,7 @@ using LRTV.ContextModels;
 using LRTV.Models;
 using LRTV.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LRTV.Controllers
 {
@@ -21,7 +22,12 @@ namespace LRTV.Controllers
         {
             var teams = _context.Teams.OrderBy(t => t.Ranking).Take(5).ToList();
             var news = _context.News.OrderByDescending(n => n.Data).Take(5).ToList();
-            var matches = _context.Matches.OrderByDescending(m => m.DateTime).Take(5).ToList();
+            var matches = _context.Matches
+        .Include(m => m.Team1)
+        .Include(m => m.Team2) // Ensure Team2 is included
+        .OrderByDescending(m => m.DateTime)
+        .Take(5)
+        .ToList();
             var topRatedPlayer = _context.Players.OrderByDescending(p => p.Rating).FirstOrDefault();
 
             var viewModel = new HomePageViewModel
@@ -35,15 +41,15 @@ namespace LRTV.Controllers
             return View(viewModel);
         }
 
-        public IActionResult AccessForbidden()
-        {
-            return View("AccessForbidden");
-        }
-
 
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public IActionResult AccessForbidden()
+        {
+            return View("AccessForbidden");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
